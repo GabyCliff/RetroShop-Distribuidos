@@ -29,11 +29,11 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
-	implementation 'net.devh:grpc-server-spring-boot-starter:2.13.0.RELEASE'
+	implementation 'net.devh:grpc-server-spring-boot-starter:2.13.1.RELEASE'
 
-	runtimeOnly 'io.grpc:grpc-netty-shaded:1.43.1'
-	implementation 'io.grpc:grpc-protobuf:1.43.1'
-	implementation 'io.grpc:grpc-stub:1.43.1'
+	runtimeOnly 'io.grpc:grpc-netty-shaded:1.48.1'
+	implementation 'io.grpc:grpc-protobuf:1.48.1'
+	implementation 'io.grpc:grpc-stub:1.48.1'
 }
 
 protobuf {

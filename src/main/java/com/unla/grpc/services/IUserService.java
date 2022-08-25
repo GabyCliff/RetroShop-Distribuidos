@@ -4,8 +4,12 @@ import com.unla.grpc.dtos.UserDTO;
 
 public interface IUserService {
 
-    String createUser(UserDTO userDTO);
+    String createUser(String username, String password, UserDTO userDTO);
 
-    UserDTO getUser(String username);
+    UserDTO getUser(String username, String password, String userToFind);
+
+    UserDTO getCurrentUser(String username, String password);
+
+    void setup(UserDTO userDTO);
 
 }
