@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+message Empty {}
+
+message UserDto {
+    int64 idUser = 1;
+    string userName = 2;
+    string password = 3;
+}
+
+message UserListResponse {
+    repeated UserDto users = 1;
+}
+
+service UserService {
+    rpc GetList(Empty) returns (UserListResponse);
+}
