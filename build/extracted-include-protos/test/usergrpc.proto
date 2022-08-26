@@ -6,7 +6,7 @@ option java_package = "com.unlauserservergrpc.grpc";
 service userService{
   rpc findCurrentUser(CurrentUser) returns (ResponseObjectUserData){}
   rpc findUserByUsername(UserToFind) returns (ResponseObjectUserData){}
-  rpc createUser(UserRequest) returns (TransactionMessage){}
+  rpc createNewUser(UserRequest) returns (ResponseObjectUserData){}
 }
 
 message CurrentUser{

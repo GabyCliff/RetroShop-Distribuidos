@@ -78,34 +78,34 @@ public final class userServiceGrpc {
   }
 
   private static volatile io.grpc.MethodDescriptor<com.unlauserservergrpc.grpc.UserRequest,
-      com.unlauserservergrpc.grpc.TransactionMessage> getCreateUserMethod;
+      com.unlauserservergrpc.grpc.ResponseObjectUserData> getCreateNewUserMethod;
 
   @io.grpc.stub.annotations.RpcMethod(
-      fullMethodName = SERVICE_NAME + '/' + "createUser",
+      fullMethodName = SERVICE_NAME + '/' + "createNewUser",
       requestType = com.unlauserservergrpc.grpc.UserRequest.class,
-      responseType = com.unlauserservergrpc.grpc.TransactionMessage.class,
+      responseType = com.unlauserservergrpc.grpc.ResponseObjectUserData.class,
       methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
   public static io.grpc.MethodDescriptor<com.unlauserservergrpc.grpc.UserRequest,
-      com.unlauserservergrpc.grpc.TransactionMessage> getCreateUserMethod() {
-    io.grpc.MethodDescriptor<com.unlauserservergrpc.grpc.UserRequest, com.unlauserservergrpc.grpc.TransactionMessage> getCreateUserMethod;
-    if ((getCreateUserMethod = userServiceGrpc.getCreateUserMethod) == null) {
+      com.unlauserservergrpc.grpc.ResponseObjectUserData> getCreateNewUserMethod() {
+    io.grpc.MethodDescriptor<com.unlauserservergrpc.grpc.UserRequest, com.unlauserservergrpc.grpc.ResponseObjectUserData> getCreateNewUserMethod;
+    if ((getCreateNewUserMethod = userServiceGrpc.getCreateNewUserMethod) == null) {
       synchronized (userServiceGrpc.class) {
-        if ((getCreateUserMethod = userServiceGrpc.getCreateUserMethod) == null) {
-          userServiceGrpc.getCreateUserMethod = getCreateUserMethod =
-              io.grpc.MethodDescriptor.<com.unlauserservergrpc.grpc.UserRequest, com.unlauserservergrpc.grpc.TransactionMessage>newBuilder()
+        if ((getCreateNewUserMethod = userServiceGrpc.getCreateNewUserMethod) == null) {
+          userServiceGrpc.getCreateNewUserMethod = getCreateNewUserMethod =
+              io.grpc.MethodDescriptor.<com.unlauserservergrpc.grpc.UserRequest, com.unlauserservergrpc.grpc.ResponseObjectUserData>newBuilder()
               .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
-              .setFullMethodName(generateFullMethodName(SERVICE_NAME, "createUser"))
+              .setFullMethodName(generateFullMethodName(SERVICE_NAME, "createNewUser"))
               .setSampledToLocalTracing(true)
               .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
                   com.unlauserservergrpc.grpc.UserRequest.getDefaultInstance()))
               .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
-                  com.unlauserservergrpc.grpc.TransactionMessage.getDefaultInstance()))
-              .setSchemaDescriptor(new userServiceMethodDescriptorSupplier("createUser"))
+                  com.unlauserservergrpc.grpc.ResponseObjectUserData.getDefaultInstance()))
+              .setSchemaDescriptor(new userServiceMethodDescriptorSupplier("createNewUser"))
               .build();
         }
       }
     }
-    return getCreateUserMethod;
+    return getCreateNewUserMethod;
   }
 
   /**
@@ -172,9 +172,9 @@ public final class userServiceGrpc {
 
     /**
      */
-    public void createUser(com.unlauserservergrpc.grpc.UserRequest request,
-        io.grpc.stub.StreamObserver<com.unlauserservergrpc.grpc.TransactionMessage> responseObserver) {
-      io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall(getCreateUserMethod(), responseObserver);
+    public void createNewUser(com.unlauserservergrpc.grpc.UserRequest request,
+        io.grpc.stub.StreamObserver<com.unlauserservergrpc.grpc.ResponseObjectUserData> responseObserver) {
+      io.grpc.stub.ServerCalls.asyncUnimplementedUnaryCall(getCreateNewUserMethod(), responseObserver);
     }
 
     @java.lang.Override public final io.grpc.ServerServiceDefinition bindService() {
@@ -194,12 +194,12 @@ public final class userServiceGrpc {
                 com.unlauserservergrpc.grpc.ResponseObjectUserData>(
                   this, METHODID_FIND_USER_BY_USERNAME)))
           .addMethod(
-            getCreateUserMethod(),
+            getCreateNewUserMethod(),
             io.grpc.stub.ServerCalls.asyncUnaryCall(
               new MethodHandlers<
                 com.unlauserservergrpc.grpc.UserRequest,
-                com.unlauserservergrpc.grpc.TransactionMessage>(
-                  this, METHODID_CREATE_USER)))
+                com.unlauserservergrpc.grpc.ResponseObjectUserData>(
+                  this, METHODID_CREATE_NEW_USER)))
           .build();
     }
   }
@@ -236,10 +236,10 @@ public final class userServiceGrpc {
 
     /**
      */
-    public void createUser(com.unlauserservergrpc.grpc.UserRequest request,
-        io.grpc.stub.StreamObserver<com.unlauserservergrpc.grpc.TransactionMessage> responseObserver) {
+    public void createNewUser(com.unlauserservergrpc.grpc.UserRequest request,
+        io.grpc.stub.StreamObserver<com.unlauserservergrpc.grpc.ResponseObjectUserData> responseObserver) {
       io.grpc.stub.ClientCalls.asyncUnaryCall(
-          getChannel().newCall(getCreateUserMethod(), getCallOptions()), request, responseObserver);
+          getChannel().newCall(getCreateNewUserMethod(), getCallOptions()), request, responseObserver);
     }
   }
 
@@ -273,9 +273,9 @@ public final class userServiceGrpc {
 
     /**
      */
-    public com.unlauserservergrpc.grpc.TransactionMessage createUser(com.unlauserservergrpc.grpc.UserRequest request) {
+    public com.unlauserservergrpc.grpc.ResponseObjectUserData createNewUser(com.unlauserservergrpc.grpc.UserRequest request) {
       return io.grpc.stub.ClientCalls.blockingUnaryCall(
-          getChannel(), getCreateUserMethod(), getCallOptions(), request);
+          getChannel(), getCreateNewUserMethod(), getCallOptions(), request);
     }
   }
 
@@ -311,16 +311,16 @@ public final class userServiceGrpc {
 
     /**
      */
-    public com.google.common.util.concurrent.ListenableFuture<com.unlauserservergrpc.grpc.TransactionMessage> createUser(
+    public com.google.common.util.concurrent.ListenableFuture<com.unlauserservergrpc.grpc.ResponseObjectUserData> createNewUser(
         com.unlauserservergrpc.grpc.UserRequest request) {
       return io.grpc.stub.ClientCalls.futureUnaryCall(
-          getChannel().newCall(getCreateUserMethod(), getCallOptions()), request);
+          getChannel().newCall(getCreateNewUserMethod(), getCallOptions()), request);
     }
   }
 
   private static final int METHODID_FIND_CURRENT_USER = 0;
   private static final int METHODID_FIND_USER_BY_USERNAME = 1;
-  private static final int METHODID_CREATE_USER = 2;
+  private static final int METHODID_CREATE_NEW_USER = 2;
 
   private static final class MethodHandlers<Req, Resp> implements
       io.grpc.stub.ServerCalls.UnaryMethod<Req, Resp>,
@@ -347,9 +347,9 @@ public final class userServiceGrpc {
           serviceImpl.findUserByUsername((com.unlauserservergrpc.grpc.UserToFind) request,
               (io.grpc.stub.StreamObserver<com.unlauserservergrpc.grpc.ResponseObjectUserData>) responseObserver);
           break;
-        case METHODID_CREATE_USER:
-          serviceImpl.createUser((com.unlauserservergrpc.grpc.UserRequest) request,
-              (io.grpc.stub.StreamObserver<com.unlauserservergrpc.grpc.TransactionMessage>) responseObserver);
+        case METHODID_CREATE_NEW_USER:
+          serviceImpl.createNewUser((com.unlauserservergrpc.grpc.UserRequest) request,
+              (io.grpc.stub.StreamObserver<com.unlauserservergrpc.grpc.ResponseObjectUserData>) responseObserver);
           break;
         default:
           throw new AssertionError();
@@ -414,7 +414,7 @@ public final class userServiceGrpc {
               .setSchemaDescriptor(new userServiceFileDescriptorSupplier())
               .addMethod(getFindCurrentUserMethod())
               .addMethod(getFindUserByUsernameMethod())
-              .addMethod(getCreateUserMethod())
+              .addMethod(getCreateNewUserMethod())
               .build();
         }
       }

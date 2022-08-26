@@ -66,13 +66,13 @@ public final class Usergrpc {
       "serResponse\022\n\n\002id\030\001 \001(\003\022\020\n\010username\030\002 \001(" +
       "\t\022\014\n\004name\030\003 \001(\t\022\017\n\007surname\030\004 \001(\t\022\013\n\003dni\030" +
       "\005 \001(\005\022\r\n\005email\030\006 \001(\t\022\014\n\004role\030\007 \001(\t\"$\n\022Tr" +
-      "ansactionMessage\022\016\n\006messge\030\001 \001(\t2\272\001\n\013use" +
+      "ansactionMessage\022\016\n\006messge\030\001 \001(\t2\301\001\n\013use" +
       "rService\022:\n\017findCurrentUser\022\014.CurrentUse" +
       "r\032\027.ResponseObjectUserData\"\000\022<\n\022findUser" +
       "ByUsername\022\013.UserToFind\032\027.ResponseObject" +
-      "UserData\"\000\0221\n\ncreateUser\022\014.UserRequest\032\023" +
-      ".TransactionMessage\"\000B\037\n\033com.unlauserser" +
-      "vergrpc.grpcP\001b\006proto3"
+      "UserData\"\000\0228\n\rcreateNewUser\022\014.UserReques" +
+      "t\032\027.ResponseObjectUserData\"\000B\037\n\033com.unla" +
+      "userservergrpc.grpcP\001b\006proto3"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,

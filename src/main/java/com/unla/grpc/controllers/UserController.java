@@ -22,7 +22,7 @@ public class UserController {
     @PostMapping
     public String createUser(@RequestBody UserDTO userDTO){
         userService.setup(userDTO);
-        return "OK";
+        return "SETUP OK";
     }
 
 }

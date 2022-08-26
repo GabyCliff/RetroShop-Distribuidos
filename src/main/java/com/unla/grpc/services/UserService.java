@@ -1,6 +1,8 @@
 package com.unla.grpc.services;
 
+import com.unla.grpc.constants.UserConstants;
 import com.unla.grpc.converters.UserConverter;
+import com.unla.grpc.dtos.ResponseData;
 import com.unla.grpc.dtos.UserDTO;
 import com.unla.grpc.models.User;
 import com.unla.grpc.repositories.UserRepository;
@@ -16,6 +18,7 @@ import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -36,34 +39,53 @@ public class UserService implements IUserService{
     private UserRepository userRepository;
 
     @Override
-    public String createUser(String username, String password, UserDTO userDTO) {
+    public ResponseData<UserDTO> createUser(String username, String password, UserDTO userDTO) {
+
         if (!validateAccess(username, password, true)){
-            return "Incorrect user and pass OR Permission insufficient";
+            return new ResponseData<>(null, UserConstants.ACCESS_VALIDATION_ERROR_MESSAGE);
         }
+        String requestValidation = validateUserRequest(userDTO);
+        if (!UserConstants.OK.equals(requestValidation)){
+            return new ResponseData<>(null, requestValidation);
+        }
+        if (validateDuplicatedUser(userDTO.getUsername(), userDTO.getEmail(), userDTO.getDni())){
+            return new ResponseData<>(null, UserConstants.DUPLICATED_USER_ERROR_MESSAGE);
+        }
+
         String passEncoded = encryptPass(userDTO.getPassword());
         userDTO.setPassword(passEncoded);
-        userRepository.save(UserConverter.fromUserDTOtoUser(userDTO));
-        return "User created successfully";
+        User createdUser = userRepository.save(UserConverter.fromUserDTOtoUser(userDTO));
+        return new ResponseData<>(UserConverter.fromUserToUserDTO(createdUser), UserConstants.OK);
     }
 
     @Override
-    public UserDTO getUser(String username, String password, String userToFind) {
+    public ResponseData<UserDTO> getUser(String username, String password, String userToFind) {
         if (!validateAccess(username, password, true)){
-            return null;
+            return new ResponseData<>(null, UserConstants.ACCESS_VALIDATION_ERROR_MESSAGE);
         }
         Optional<User> userResult = userRepository.findByUsername(userToFind);
-        return userResult.map(UserConverter::fromUserToUserDTO).orElse(null);
+        return userResult.map(
+                        user -> new ResponseData<>(UserConverter.fromUserToUserDTO(user),
+                                UserConstants.OK))
+                .orElseGet(
+                        () -> new ResponseData<>(null, UserConstants.USER_NOT_FOUND_ERROR_MESSAGE));
     }
 
     @Override
-    public UserDTO getCurrentUser(String username, String password) {
+    public ResponseData<UserDTO> getCurrentUser(String username, String password) {
         String passEncoded = encryptPass(password);
         Optional<User> userResult = userRepository.findByUsernameAndPassword(username, passEncoded);
-        return userResult.map(UserConverter::fromUserToUserDTO).orElse(null);
+        return userResult.map(
+                        user -> new ResponseData<>(UserConverter.fromUserToUserDTO(user),
+                                UserConstants.OK))
+                .orElseGet(
+                        () -> new ResponseData<>(null, UserConstants.USER_NOT_FOUND_ERROR_MESSAGE));
     }
 
     @Override
     public void setup(UserDTO userDTO) {
+        String passEncoded = encryptPass(userDTO.getPassword());
+        userDTO.setPassword(passEncoded);
         userRepository.save(UserConverter.fromUserDTOtoUser(userDTO));
     }
 
@@ -82,7 +104,6 @@ public class UserService implements IUserService{
                 IllegalBlockSizeException e) {
             e.printStackTrace();
         }
-        System.out.println(encrypted);
         return encrypted;
     }
 
@@ -91,6 +112,34 @@ public class UserService implements IUserService{
         Optional<User> user = userRepository.findByUsernameAndPasswordAndRole(
                 username, passEncoded, admin ? "ADMIN" : "STANDARD");
         return user.isPresent();
+    }
+
+    private String validateUserRequest(UserDTO request){
+
+        if (StringUtils.isEmpty(request.getName())){
+            return UserConstants.REQUEST_NAME_ERROR_MESSAGE;
+        }
+        if (StringUtils.isEmpty(request.getSurname())){
+            return UserConstants.REQUEST_SURNAME_ERROR_MESSAGE;
+        }
+        if (request.getDni() < 1000000){
+            return UserConstants.REQUEST_DNI_ERROR_MESSAGE;
+        }
+        if (StringUtils.isEmpty(request.getUsername())){
+            return UserConstants.REQUEST_USERNAME_ERROR_MESSAGE;
+        }
+        if (StringUtils.isEmpty(request.getPassword())){
+            return UserConstants.REQUEST_PASS_ERROR_MESSAGE;
+        }
+        if (StringUtils.isEmpty(request.getEmail())){
+            return UserConstants.REQUEST_EMAIL_ERROR_MESSAGE;
+        }
+
+        return UserConstants.OK;
+    }
+
+    private boolean validateDuplicatedUser(String username, String email, int dni){
+        return userRepository.findByUsernameOrEmailOrDni(username, email, dni).isPresent();
     }
 
 }
