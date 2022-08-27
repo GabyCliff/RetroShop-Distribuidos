@@ -16,16 +16,20 @@ public class UserConverter {
         user.setName(dto.getName());
         user.setSurname(dto.getSurname());
         user.setEmail(dto.getEmail());
+        user.setRole("STANDARD");
+        user.setDni(dto.getDni());
         return user;
     }
 
     public static UserDTO fromUserToUserDTO(User user){
         UserDTO dto = new UserDTO();
+        dto.setId(user.getId());
         dto.setUsername(user.getUsername());
-        dto.setPassword(user.getPassword());
         dto.setName(user.getName());
         dto.setSurname(user.getSurname());
         dto.setEmail(user.getEmail());
+        dto.setRole(user.getRole());
+        dto.setDni(user.getDni());
         return dto;
     }
 
