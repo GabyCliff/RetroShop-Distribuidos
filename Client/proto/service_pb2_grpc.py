@@ -2,10 +2,10 @@
 """Client and server classes corresponding to protobuf-defined services."""
 import grpc
 
-import service_pb2 as service__pb2
+from proto import service_pb2 as proto_dot_service__pb2
 
 
-class UserServiceStub(object):
+class userServiceStub(object):
     """Missing associated documentation comment in .proto file."""
 
     def __init__(self, channel):
@@ -14,42 +14,74 @@ class UserServiceStub(object):
         Args:
             channel: A grpc.Channel.
         """
-        self.GetList = channel.unary_unary(
-                '/UserService/GetList',
-                request_serializer=service__pb2.Empty.SerializeToString,
-                response_deserializer=service__pb2.UserListResponse.FromString,
+        self.getList = channel.unary_unary(
+                '/userService/getList',
+                request_serializer=proto_dot_service__pb2.Empty.SerializeToString,
+                response_deserializer=proto_dot_service__pb2.ResponseUserList.FromString,
+                )
+        self.createNewUser = channel.unary_unary(
+                '/userService/createNewUser',
+                request_serializer=proto_dot_service__pb2.UserRequest.SerializeToString,
+                response_deserializer=proto_dot_service__pb2.ResponseObjectUserData.FromString,
+                )
+        self.findCurrentUser = channel.unary_unary(
+                '/userService/findCurrentUser',
+                request_serializer=proto_dot_service__pb2.CurrentUser.SerializeToString,
+                response_deserializer=proto_dot_service__pb2.ResponseObjectUserData.FromString,
                 )
 
 
-class UserServiceServicer(object):
+class userServiceServicer(object):
     """Missing associated documentation comment in .proto file."""
 
-    def GetList(self, request, context):
+    def getList(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def createNewUser(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def findCurrentUser(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
 
-def add_UserServiceServicer_to_server(servicer, server):
+def add_userServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
-            'GetList': grpc.unary_unary_rpc_method_handler(
-                    servicer.GetList,
-                    request_deserializer=service__pb2.Empty.FromString,
-                    response_serializer=service__pb2.UserListResponse.SerializeToString,
+            'getList': grpc.unary_unary_rpc_method_handler(
+                    servicer.getList,
+                    request_deserializer=proto_dot_service__pb2.Empty.FromString,
+                    response_serializer=proto_dot_service__pb2.ResponseUserList.SerializeToString,
+            ),
+            'createNewUser': grpc.unary_unary_rpc_method_handler(
+                    servicer.createNewUser,
+                    request_deserializer=proto_dot_service__pb2.UserRequest.FromString,
+                    response_serializer=proto_dot_service__pb2.ResponseObjectUserData.SerializeToString,
+            ),
+            'findCurrentUser': grpc.unary_unary_rpc_method_handler(
+                    servicer.findCurrentUser,
+                    request_deserializer=proto_dot_service__pb2.CurrentUser.FromString,
+                    response_serializer=proto_dot_service__pb2.ResponseObjectUserData.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
-            'UserService', rpc_method_handlers)
+            'userService', rpc_method_handlers)
     server.add_generic_rpc_handlers((generic_handler,))
 
 
  # This class is part of an EXPERIMENTAL API.
-class UserService(object):
+class userService(object):
     """Missing associated documentation comment in .proto file."""
 
     @staticmethod
-    def GetList(request,
+    def getList(request,
             target,
             options=(),
             channel_credentials=None,
@@ -59,8 +91,42 @@ class UserService(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/UserService/GetList',
-            service__pb2.Empty.SerializeToString,
-            service__pb2.UserListResponse.FromString,
+        return grpc.experimental.unary_unary(request, target, '/userService/getList',
+            proto_dot_service__pb2.Empty.SerializeToString,
+            proto_dot_service__pb2.ResponseUserList.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def createNewUser(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/userService/createNewUser',
+            proto_dot_service__pb2.UserRequest.SerializeToString,
+            proto_dot_service__pb2.ResponseObjectUserData.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def findCurrentUser(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/userService/findCurrentUser',
+            proto_dot_service__pb2.CurrentUser.SerializeToString,
+            proto_dot_service__pb2.ResponseObjectUserData.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

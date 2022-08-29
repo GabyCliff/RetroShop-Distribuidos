@@ -7,7 +7,10 @@ service userService{
   rpc findCurrentUser(CurrentUser) returns (ResponseObjectUserData){}
   rpc findUserByUsername(UserToFind) returns (ResponseObjectUserData){}
   rpc createNewUser(UserRequest) returns (ResponseObjectUserData){}
+  rpc getList(Empty) returns (ResponseUserList){}
 }
+
+message Empty {}
 
 message CurrentUser{
   string username = 1;
@@ -29,6 +32,10 @@ message UserRequest{
   string surname = 6;
   string email = 7;
   int32 dni = 8;
+}
+
+message ResponseUserList {
+  repeated UserResponse users = 1;
 }
 
 message ResponseObjectUserData{

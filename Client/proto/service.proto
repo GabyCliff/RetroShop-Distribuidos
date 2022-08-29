@@ -2,16 +2,45 @@ syntax = "proto3";
 
 message Empty {}
 
-message UserDto {
-    int64 idUser = 1;
-    string userName = 2;
-    string password = 3;
+message CurrentUser{
+    string username = 1;
+    string password = 2;
 }
 
-message UserListResponse {
-    repeated UserDto users = 1;
+message UserRequest{
+    string username = 1;
+    string password = 2;
+    string name = 3;
+    string surname = 4;
+    string email = 5;
+    int32 dni = 6;
 }
 
-service UserService {
-    rpc GetList(Empty) returns (UserListResponse);
+message UserResponse{
+    int64 id = 1;
+    string username = 2;
+    string name = 3;
+    string surname = 4;
+    int32 dni = 5;
+    string email = 6;
+    string role = 7;
+}
+
+message TransactionMessage{
+    string messge = 1;
+}
+
+message ResponseUserList {
+    repeated UserResponse users = 1;
+}
+
+message ResponseObjectUserData{
+    UserResponse user = 1;
+    TransactionMessage description = 2;
+}
+
+service userService {
+    rpc getList(Empty) returns (ResponseUserList){}
+    rpc createNewUser(UserRequest) returns (ResponseObjectUserData){}
+    rpc findCurrentUser(CurrentUser) returns (ResponseObjectUserData){}
 }

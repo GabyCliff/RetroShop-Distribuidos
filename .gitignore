@@ -3,3 +3,4 @@ UserServer/.idea
 UserServer/build
 UserServer/gradle
 UserServer/src/resources
+UserServer/bin/
