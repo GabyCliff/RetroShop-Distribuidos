@@ -1,0 +1,55 @@
+syntax = "proto3"; //determino la sintaxis a usar
+
+
+//defino un servicio
+service virtualWalletService{
+  rpc findOneById(id) returns (ResponseObjectVirtualWalletData){}
+  rpc findVirtualWalletByNumber(number) returns (ResponseObjectVirtualWalletData){}
+  rpc createNewVirtualWallet(VirtualWalletRequest) returns (ResponseObjectVirtualWalletData){}
+  rpc updateVirtualWallet(DataToUpdateRequest) returns (ResponseObjectVirtualWalletData){}
+
+}
+
+message id{
+  int64 id = 1;
+}
+
+message number{
+  string number = 1;
+}
+
+message VirtualWalletRequest{
+  string number = 1;
+  int64 balance = 2;
+  string name = 3;
+  string surname = 4;
+  int32 dni = 5;
+  string valid_from = 6;
+  string valid_until = 7;
+}
+
+message DataToUpdateRequest{
+  string number = 1;
+  bool is_money_income= 2;
+  int64 value = 3;
+}
+
+message ResponseObjectVirtualWalletData{
+  VirtualWalletResponse virtualWalletResponse = 1;
+  TransactionMessage description = 2;
+}
+
+message VirtualWalletResponse{
+  int64 id = 1;
+  string number = 2;
+  int64 balance = 3;
+  string name = 4;
+  string surname = 5;
+  int32 dni = 6;
+  string valid_from = 7;
+  string valid_until = 8;
+}
+
+message TransactionMessage{
+  string message = 1;
+}
