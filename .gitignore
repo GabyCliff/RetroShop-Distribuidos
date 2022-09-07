@@ -1,6 +1,8 @@
-RetroShop_server_grpc/.gradle
-RetroShop_server_grpc/.idea
-RetroShop_server_grpc/build
-RetroShop_server_grpc/gradle
-RetroShop_server_grpc/src/resources
-RetroShop_server_grpc/bin/
+Server/.gradle
+Server/.idea
+Server/build
+Server/gradle
+Server/src/resources
+Server/bin/
+
+Front/node_modules
