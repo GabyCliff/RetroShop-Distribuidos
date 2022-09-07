@@ -1,0 +1,57 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "com.unlauserservergrpc.grpc";
+
+import "google/protobuf/any.proto";
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/empty.proto";
+
+message Id{
+  int64 id = 1;
+}
+
+message Ok{
+  string ok = 1;
+}
+
+message ProductSaveRequest{
+  string name = 2;
+  string description = 3;
+  //google.protobuf.Timestamp date = 4;
+  //repeated string listPhoto = 5;
+  float price = 6;
+  int32 available = 7;
+}
+
+message ProductSaveResponse{
+  int64 id = 1;
+  string name = 2;
+  string description = 3;
+ // google.protobuf.Timestamp date = 4;
+  repeated string listPhoto = 5;
+  float price = 6;
+  int32 available = 7;
+}
+
+message date {
+  int32 day = 1;
+  int32 month = 2;
+  int32 year = 3;
+}
+
+
+message TransactionMessage{
+  string message = 1;
+}
+
+message Empty{
+
+}
+
+service productService{
+  //FUNCION( PARAMETRO QUE RECIBE) RETORNO( QUE RETORNA)
+  rpc saveProduct(ProductSaveRequest) returns (Empty){}
+  rpc updateProduct(ProductSaveRequest) returns (ProductSaveResponse){}
+}
+
