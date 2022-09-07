@@ -29,7 +29,7 @@ public class ProductService implements IProductService{
         Product aux = modelMapper.map(product,Product.class);
         if(product.getPhotos().size() > 5){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El producto no fue agregado porque tiene mas de 5 fotos");
-        }else if(product.getPhotos().size() <= 1){
+        }else if(product.getPhotos().size() < 1){
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El producto no fue agregado porque tiene menos de 1 foto");
         }
         productRepository.save(aux);

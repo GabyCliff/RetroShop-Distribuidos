@@ -39,7 +39,8 @@ def findUserByUsername():
     result = user.findUserByUsername(request.json)
     return MessageToJson(result)
 
-#///////////// fin user /////////////////
+
+#///////////// Billetera  /////////////////
 
 
 @app.route(base_url_vitual_wallet+'/create', methods=['POST'])

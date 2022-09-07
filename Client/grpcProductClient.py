@@ -18,8 +18,8 @@ class ProductClient(object):
             name = product['name'],
             description = product['description'],
             listPhoto = product['listPhoto'],
-            price = product['surname'],
-            available = product['email'],
+            price = product['price'],
+            available = product['available'],
       )
       return self.stub.saveProduct(productSave)
    
