@@ -24,6 +24,11 @@ class virtualWalletServiceStub(object):
                 request_serializer=proto_dot_virtualWallet_dot_client__grpc__pb2.number.SerializeToString,
                 response_deserializer=proto_dot_virtualWallet_dot_client__grpc__pb2.ResponseObjectVirtualWalletData.FromString,
                 )
+        self.findOneByDni = channel.unary_unary(
+                '/virtualWalletService/findOneByDni',
+                request_serializer=proto_dot_virtualWallet_dot_client__grpc__pb2.numDni.SerializeToString,
+                response_deserializer=proto_dot_virtualWallet_dot_client__grpc__pb2.ResponseObjectVirtualWalletData.FromString,
+                )
         self.createNewVirtualWallet = channel.unary_unary(
                 '/virtualWalletService/createNewVirtualWallet',
                 request_serializer=proto_dot_virtualWallet_dot_client__grpc__pb2.VirtualWalletRequest.SerializeToString,
@@ -46,6 +51,12 @@ class virtualWalletServiceServicer(object):
         raise NotImplementedError('Method not implemented!')
 
     def findVirtualWalletByNumber(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def findOneByDni(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -74,6 +85,11 @@ def add_virtualWalletServiceServicer_to_server(servicer, server):
             'findVirtualWalletByNumber': grpc.unary_unary_rpc_method_handler(
                     servicer.findVirtualWalletByNumber,
                     request_deserializer=proto_dot_virtualWallet_dot_client__grpc__pb2.number.FromString,
+                    response_serializer=proto_dot_virtualWallet_dot_client__grpc__pb2.ResponseObjectVirtualWalletData.SerializeToString,
+            ),
+            'findOneByDni': grpc.unary_unary_rpc_method_handler(
+                    servicer.findOneByDni,
+                    request_deserializer=proto_dot_virtualWallet_dot_client__grpc__pb2.numDni.FromString,
                     response_serializer=proto_dot_virtualWallet_dot_client__grpc__pb2.ResponseObjectVirtualWalletData.SerializeToString,
             ),
             'createNewVirtualWallet': grpc.unary_unary_rpc_method_handler(
@@ -126,6 +142,23 @@ class virtualWalletService(object):
             metadata=None):
         return grpc.experimental.unary_unary(request, target, '/virtualWalletService/findVirtualWalletByNumber',
             proto_dot_virtualWallet_dot_client__grpc__pb2.number.SerializeToString,
+            proto_dot_virtualWallet_dot_client__grpc__pb2.ResponseObjectVirtualWalletData.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def findOneByDni(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/virtualWalletService/findOneByDni',
+            proto_dot_virtualWallet_dot_client__grpc__pb2.numDni.SerializeToString,
             proto_dot_virtualWallet_dot_client__grpc__pb2.ResponseObjectVirtualWalletData.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

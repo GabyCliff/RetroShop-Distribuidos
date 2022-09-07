@@ -21,20 +21,21 @@ const RESPONSES = {
 }
 
 export function loginAPI(email, pwd){
-
+    console.log(email, pwd)
     return new Promise((resolve, reject) => {
-        axios.post("/api/auth/login", {
-            email: email,
-            pwd: pwd
+        axios.post("http://127.0.0.1:5000/findCurrentUser", {
+            username: email,
+            password: pwd
         })
         .then((resp) => {
+            console.log(resp);
             resolve({
                 token: resp.headers["auth-token"],
                 user: resp.data.user
             })
         })
         .catch((error) => {
-            reject(RESPONSES[error.response.data.msg]);
+            reject(RESPONSES[error.response.data]);
         });
     })
 

@@ -9,6 +9,8 @@ public interface IVirtualWalletService {
 
     ResponseData<VirtualWalletDTO> getVirtualWalletByNumber(String number);
 
+    ResponseData<VirtualWalletDTO> getVirtualWalletByDni(String numDni);
+
     ResponseData<VirtualWalletDTO> getVirtualWalletById(long id);
 
     ResponseData<VirtualWalletDTO> updateVirtualWallet(String number, boolean isMoneyIncome, long value);

@@ -1,6 +1,7 @@
 from flask import Flask, request
 from flask_cors import CORS, cross_origin
 from google.protobuf.json_format import MessageToJson
+from grpcProductClient import ProductClient
 from grpcVirtualValletClient import GrpcVirtualWalletClient as Grpc_vir_wal_client
 from grpcUserClient import UserClient
 
@@ -16,12 +17,6 @@ def hello():
     return "Service (OK)"
 
 #///////////// user /////////////////
-@app.route(base_url_user+'/getUsers')
-@cross_origin()
-def getUsers():
-    user = UserClient()
-    result = user.getList()
-    return MessageToJson(result)
 
 @app.route(base_url_user+'/createUser', methods=['POST'])
 @cross_origin()
@@ -39,12 +34,13 @@ def findCurrentUser():
 
 @app.route(base_url_user+'/findUserByUsername', methods=['POST'])
 @cross_origin()
-def findCurrentUser():
+def findUserByUsername():
     user = UserClient()
     result = user.findUserByUsername(request.json)
     return MessageToJson(result)
 
-#///////////// fin user /////////////////
+
+#///////////// Billetera  /////////////////
 
 
 @app.route(base_url_vitual_wallet+'/create', methods=['POST'])
@@ -70,6 +66,13 @@ def find_v_w_ByNumber():
     result = grpc_vir_wal_client.findByNumber_v_w(request.json)
     return MessageToJson(result)
 
+@app.route(base_url_vitual_wallet+'/findByDni', methods=['POST'])
+@cross_origin()
+def find_v_w_ByDni():
+    grpc_vir_wal_client = Grpc_vir_wal_client()
+    result = grpc_vir_wal_client.findByDni_v_w(request.json)
+    return MessageToJson(result)
+
 
 @app.route(base_url_vitual_wallet+'/update', methods=['POST'])
 @cross_origin()
@@ -78,6 +81,29 @@ def update_v_w():
     result = grpc_vir_wal_client.v_w_update(request.json)
     return MessageToJson(result)
 
+
+#///////////// Productos /////////////////
+
+@app.route('/saveProduct', methods=['POST'])
+@cross_origin()
+def saveProduct():
+    product = ProductClient()
+    result = product.saveProduct(request.json)
+    return MessageToJson(result)
+
+@app.route('/updateProduct', methods=['POST'])
+@cross_origin()
+def updateProduct():
+    product = ProductClient()
+    result = product.updateProduct(request.json)
+    return MessageToJson(result)
+
+@app.route('/getProduct', methods=['POST'])
+@cross_origin()
+def getProduct():
+    product = ProductClient()
+    result = product.getProduct(request.json)
+    return MessageToJson(result)
 
 if __name__ == '__main__':
     app.run()

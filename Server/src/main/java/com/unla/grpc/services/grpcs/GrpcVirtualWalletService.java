@@ -44,6 +44,15 @@ public class GrpcVirtualWalletService extends virtualWalletServiceGrpc.virtualWa
     }
 
     @Override
+    public void findOneByDni(numDni request, StreamObserver<ResponseObjectVirtualWalletData> responseObserver) {
+        //super.findOneByDni(request, responseObserver);
+        ResponseData<VirtualWalletDTO> virtualWalletDTOResponseData = iVirtualWalletService.getVirtualWalletByDni(request.getNumDni());
+        log.info(virtualWalletDTOResponseData.toString());
+
+        responseObserver.onNext(buildGrpcVirtualWallet(virtualWalletDTOResponseData));
+        responseObserver.onCompleted();
+    }
+    @Override
     public void findVirtualWalletByNumber(number request, StreamObserver<ResponseObjectVirtualWalletData> responseObserver) {
         //super.findVirtualWalletByNumber(request, responseObserver);
         ResponseData<VirtualWalletDTO> virtualWalletDTOResponseData = iVirtualWalletService.getVirtualWalletByNumber(request.getNumber());

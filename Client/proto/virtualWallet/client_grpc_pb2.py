@@ -14,11 +14,12 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n%proto/virtualWallet/client_grpc.proto\"\x10\n\x02id\x12\n\n\x02id\x18\x01 \x01(\x03\"\x18\n\x06number\x12\x0e\n\x06number\x18\x01 \x01(\t\"\x8c\x01\n\x14VirtualWalletRequest\x12\x0e\n\x06number\x18\x01 \x01(\t\x12\x0f\n\x07\x62\x61lance\x18\x02 \x01(\x03\x12\x0c\n\x04name\x18\x03 \x01(\t\x12\x0f\n\x07surname\x18\x04 \x01(\t\x12\x0b\n\x03\x64ni\x18\x05 \x01(\x05\x12\x12\n\nvalid_from\x18\x06 \x01(\t\x12\x13\n\x0bvalid_until\x18\x07 \x01(\t\"M\n\x13\x44\x61taToUpdateRequest\x12\x0e\n\x06number\x18\x01 \x01(\t\x12\x17\n\x0fis_money_income\x18\x02 \x01(\x08\x12\r\n\x05value\x18\x03 \x01(\x03\"\x82\x01\n\x1fResponseObjectVirtualWalletData\x12\x35\n\x15virtualWalletResponse\x18\x01 \x01(\x0b\x32\x16.VirtualWalletResponse\x12(\n\x0b\x64\x65scription\x18\x02 \x01(\x0b\x32\x13.TransactionMessage\"\x99\x01\n\x15VirtualWalletResponse\x12\n\n\x02id\x18\x01 \x01(\x03\x12\x0e\n\x06number\x18\x02 \x01(\t\x12\x0f\n\x07\x62\x61lance\x18\x03 \x01(\x03\x12\x0c\n\x04name\x18\x04 \x01(\t\x12\x0f\n\x07surname\x18\x05 \x01(\t\x12\x0b\n\x03\x64ni\x18\x06 \x01(\x05\x12\x12\n\nvalid_from\x18\x07 \x01(\t\x12\x13\n\x0bvalid_until\x18\x08 \x01(\t\"%\n\x12TransactionMessage\x12\x0f\n\x07message\x18\x01 \x01(\t2\xbe\x02\n\x14virtualWalletService\x12\x36\n\x0b\x66indOneById\x12\x03.id\x1a .ResponseObjectVirtualWalletData\"\x00\x12H\n\x19\x66indVirtualWalletByNumber\x12\x07.number\x1a .ResponseObjectVirtualWalletData\"\x00\x12S\n\x16\x63reateNewVirtualWallet\x12\x15.VirtualWalletRequest\x1a .ResponseObjectVirtualWalletData\"\x00\x12O\n\x13updateVirtualWallet\x12\x14.DataToUpdateRequest\x1a .ResponseObjectVirtualWalletData\"\x00\x62\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n%proto/virtualWallet/client_grpc.proto\"\x10\n\x02id\x12\n\n\x02id\x18\x01 \x01(\x03\"\x18\n\x06numDni\x12\x0e\n\x06numDni\x18\x01 \x01(\t\"\x18\n\x06number\x12\x0e\n\x06number\x18\x01 \x01(\t\"\x8c\x01\n\x14VirtualWalletRequest\x12\x0e\n\x06number\x18\x01 \x01(\t\x12\x0f\n\x07\x62\x61lance\x18\x02 \x01(\x03\x12\x0c\n\x04name\x18\x03 \x01(\t\x12\x0f\n\x07surname\x18\x04 \x01(\t\x12\x0b\n\x03\x64ni\x18\x05 \x01(\t\x12\x12\n\nvalid_from\x18\x06 \x01(\t\x12\x13\n\x0bvalid_until\x18\x07 \x01(\t\"M\n\x13\x44\x61taToUpdateRequest\x12\x0e\n\x06number\x18\x01 \x01(\t\x12\x17\n\x0fis_money_income\x18\x02 \x01(\x08\x12\r\n\x05value\x18\x03 \x01(\x03\"\x82\x01\n\x1fResponseObjectVirtualWalletData\x12\x35\n\x15virtualWalletResponse\x18\x01 \x01(\x0b\x32\x16.VirtualWalletResponse\x12(\n\x0b\x64\x65scription\x18\x02 \x01(\x0b\x32\x13.TransactionMessage\"\x99\x01\n\x15VirtualWalletResponse\x12\n\n\x02id\x18\x01 \x01(\x03\x12\x0e\n\x06number\x18\x02 \x01(\t\x12\x0f\n\x07\x62\x61lance\x18\x03 \x01(\x03\x12\x0c\n\x04name\x18\x04 \x01(\t\x12\x0f\n\x07surname\x18\x05 \x01(\t\x12\x0b\n\x03\x64ni\x18\x06 \x01(\t\x12\x12\n\nvalid_from\x18\x07 \x01(\t\x12\x13\n\x0bvalid_until\x18\x08 \x01(\t\"%\n\x12TransactionMessage\x12\x0f\n\x07message\x18\x01 \x01(\t2\xfb\x02\n\x14virtualWalletService\x12\x36\n\x0b\x66indOneById\x12\x03.id\x1a .ResponseObjectVirtualWalletData\"\x00\x12H\n\x19\x66indVirtualWalletByNumber\x12\x07.number\x1a .ResponseObjectVirtualWalletData\"\x00\x12;\n\x0c\x66indOneByDni\x12\x07.numDni\x1a .ResponseObjectVirtualWalletData\"\x00\x12S\n\x16\x63reateNewVirtualWallet\x12\x15.VirtualWalletRequest\x1a .ResponseObjectVirtualWalletData\"\x00\x12O\n\x13updateVirtualWallet\x12\x14.DataToUpdateRequest\x1a .ResponseObjectVirtualWalletData\"\x00\x62\x06proto3')
 
 
 
 _ID = DESCRIPTOR.message_types_by_name['id']
+_NUMDNI = DESCRIPTOR.message_types_by_name['numDni']
 _NUMBER = DESCRIPTOR.message_types_by_name['number']
 _VIRTUALWALLETREQUEST = DESCRIPTOR.message_types_by_name['VirtualWalletRequest']
 _DATATOUPDATEREQUEST = DESCRIPTOR.message_types_by_name['DataToUpdateRequest']
@@ -31,6 +32,13 @@ id = _reflection.GeneratedProtocolMessageType('id', (_message.Message,), {
   # @@protoc_insertion_point(class_scope:id)
   })
 _sym_db.RegisterMessage(id)
+
+numDni = _reflection.GeneratedProtocolMessageType('numDni', (_message.Message,), {
+  'DESCRIPTOR' : _NUMDNI,
+  '__module__' : 'proto.virtualWallet.client_grpc_pb2'
+  # @@protoc_insertion_point(class_scope:numDni)
+  })
+_sym_db.RegisterMessage(numDni)
 
 number = _reflection.GeneratedProtocolMessageType('number', (_message.Message,), {
   'DESCRIPTOR' : _NUMBER,
@@ -80,18 +88,20 @@ if _descriptor._USE_C_DESCRIPTORS == False:
   DESCRIPTOR._options = None
   _ID._serialized_start=41
   _ID._serialized_end=57
-  _NUMBER._serialized_start=59
-  _NUMBER._serialized_end=83
-  _VIRTUALWALLETREQUEST._serialized_start=86
-  _VIRTUALWALLETREQUEST._serialized_end=226
-  _DATATOUPDATEREQUEST._serialized_start=228
-  _DATATOUPDATEREQUEST._serialized_end=305
-  _RESPONSEOBJECTVIRTUALWALLETDATA._serialized_start=308
-  _RESPONSEOBJECTVIRTUALWALLETDATA._serialized_end=438
-  _VIRTUALWALLETRESPONSE._serialized_start=441
-  _VIRTUALWALLETRESPONSE._serialized_end=594
-  _TRANSACTIONMESSAGE._serialized_start=596
-  _TRANSACTIONMESSAGE._serialized_end=633
-  _VIRTUALWALLETSERVICE._serialized_start=636
-  _VIRTUALWALLETSERVICE._serialized_end=954
+  _NUMDNI._serialized_start=59
+  _NUMDNI._serialized_end=83
+  _NUMBER._serialized_start=85
+  _NUMBER._serialized_end=109
+  _VIRTUALWALLETREQUEST._serialized_start=112
+  _VIRTUALWALLETREQUEST._serialized_end=252
+  _DATATOUPDATEREQUEST._serialized_start=254
+  _DATATOUPDATEREQUEST._serialized_end=331
+  _RESPONSEOBJECTVIRTUALWALLETDATA._serialized_start=334
+  _RESPONSEOBJECTVIRTUALWALLETDATA._serialized_end=464
+  _VIRTUALWALLETRESPONSE._serialized_start=467
+  _VIRTUALWALLETRESPONSE._serialized_end=620
+  _TRANSACTIONMESSAGE._serialized_start=622
+  _TRANSACTIONMESSAGE._serialized_end=659
+  _VIRTUALWALLETSERVICE._serialized_start=662
+  _VIRTUALWALLETSERVICE._serialized_end=1041
 # @@protoc_insertion_point(module_scope)

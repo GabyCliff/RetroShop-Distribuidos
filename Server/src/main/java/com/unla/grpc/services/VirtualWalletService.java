@@ -45,6 +45,16 @@ public class VirtualWalletService implements IVirtualWalletService{
     }
 
     @Override
+    public ResponseData<VirtualWalletDTO> getVirtualWalletByDni(String numDni){
+        Optional<VirtualWallet> virtualWalletResult = virtualWalletRepository.findByDni(numDni);
+        return virtualWalletResult.map(
+                        virtualWallet -> new ResponseData<>(VirtualWalletConverter.fromVirtualWallet_to_VirtualWalletDTO(virtualWallet),
+                                VirtualWalletConstants.OK))
+                .orElseGet(
+                        () -> new ResponseData<>(null, VirtualWalletConstants.USER_NOT_FOUND_ERROR_MESSAGE));
+    }
+
+    @Override
     public ResponseData<VirtualWalletDTO> updateVirtualWallet(String number, boolean isMoneyIncome, long value) {
         Optional<VirtualWallet> virtualWallet = virtualWalletRepository.findByNumber(number);
         if(virtualWallet.isPresent()) {

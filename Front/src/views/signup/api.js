@@ -71,22 +71,24 @@ const RESPONSES = {
     }
 }
 
-export function registerAPI(email, pwd, user, facebook, instagram, whatsapp){
+export function registerAPI(usernameAdmin, username, password, name, surname, email, dni){
 
     return new Promise((resolve, reject) => {
-        axios.post("/api/auth/register", {
-            email: email,
-            pwd: pwd,
-            user: user,
-            facebook: facebook,
-            instagram: instagram,
-            whatsapp: whatsapp
+        axios.post("http://127.0.0.1:5000/createUser", {
+            usernameAdmin,
+            username,
+            password,
+            name,
+            surname,
+            email,
+            dni : parseInt(dni)
         })
         .then((resp) => {
-            resolve(RESPONSES[resp.data.msg]);
+            console.log(resp);
+            resolve(resp.data);
         })
         .catch((error) => {
-            reject(RESPONSES[error.response.data.msg]);
+            reject(error);
         });
     })
 

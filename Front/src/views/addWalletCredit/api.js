@@ -1,3 +1,5 @@
+import getSession from '../../utils/session';
+
 const axios = require("axios");
 
 const RESPONSES = {
@@ -71,19 +73,35 @@ const RESPONSES = {
     }
 }
 
-export function registerAPI(email, pwd, user, facebook, instagram, whatsapp){
+export function registerAPI(numTarjeta, saldoACargar, flag){
 
     return new Promise((resolve, reject) => {
-        axios.post("/api/auth/register", {
-            email: email,
-            pwd: pwd,
-            user: user,
-            facebook: facebook,
-            instagram: instagram,
-            whatsapp: whatsapp
+        axios.post("http://127.0.0.1:5000/update", {
+            number: numTarjeta,
+            value: saldoACargar,
+            is_money_income: flag
         })
         .then((resp) => {
-            resolve(RESPONSES[resp.data.msg]);
+            console.log(resp.data.virtualWalletResponse);
+            resolve(resp.data.virtualWalletResponse);
+        })
+        .catch((error) => {
+            reject(RESPONSES[error.response.data.msg]);
+        });
+    })
+
+}
+
+export function getAPI(numDni){
+
+    return new Promise((resolve, reject) => {
+        axios.post("http://127.0.0.1:5000/findByDni", {
+            numDni
+        })
+        .then((resp) => {
+            console.log(resp);
+            const respuesta = resp.data.description.message === 'User not found' ? false : resp.data.virtualWalletResponse
+            resolve(respuesta);
         })
         .catch((error) => {
             reject(RESPONSES[error.response.data.msg]);

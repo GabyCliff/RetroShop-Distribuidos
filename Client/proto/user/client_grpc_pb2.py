@@ -14,7 +14,7 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x1cproto/user/client_grpc.proto\"\x07\n\x05\x45mpty\"1\n\x0b\x43urrentUser\x12\x10\n\x08username\x18\x01 \x01(\t\x12\x10\n\x08password\x18\x02 \x01(\t\"H\n\nUserToFind\x12\x10\n\x08username\x18\x01 \x01(\t\x12\x10\n\x08password\x18\x02 \x01(\t\x12\x16\n\x0eusernameToFind\x18\x03 \x01(\t\"\x9a\x01\n\x0bUserRequest\x12\x15\n\rusernameAdmin\x18\x01 \x01(\t\x12\x15\n\rpasswordAdmin\x18\x02 \x01(\t\x12\x10\n\x08username\x18\x03 \x01(\t\x12\x10\n\x08password\x18\x04 \x01(\t\x12\x0c\n\x04name\x18\x05 \x01(\t\x12\x0f\n\x07surname\x18\x06 \x01(\t\x12\r\n\x05\x65mail\x18\x07 \x01(\t\x12\x0b\n\x03\x64ni\x18\x08 \x01(\x05\"0\n\x10ResponseUserList\x12\x1c\n\x05users\x18\x01 \x03(\x0b\x32\r.UserResponse\"c\n\x16ResponseObjectUserData\x12\x1b\n\x04user\x18\x01 \x01(\x0b\x32\r.UserResponse\x12,\n\x0b\x64\x65scription\x18\x02 \x01(\x0b\x32\x17.TransactionMessageUser\"u\n\x0cUserResponse\x12\n\n\x02id\x18\x01 \x01(\x03\x12\x10\n\x08username\x18\x02 \x01(\t\x12\x0c\n\x04name\x18\x03 \x01(\t\x12\x0f\n\x07surname\x18\x04 \x01(\t\x12\x0b\n\x03\x64ni\x18\x05 \x01(\x05\x12\r\n\x05\x65mail\x18\x06 \x01(\t\x12\x0c\n\x04role\x18\x07 \x01(\t\")\n\x16TransactionMessageUser\x12\x0f\n\x07message\x18\x01 \x01(\t2\xe9\x01\n\x0buserService\x12:\n\x0f\x66indCurrentUser\x12\x0c.CurrentUser\x1a\x17.ResponseObjectUserData\"\x00\x12<\n\x12\x66indUserByUsername\x12\x0b.UserToFind\x1a\x17.ResponseObjectUserData\"\x00\x12\x38\n\rcreateNewUser\x12\x0c.UserRequest\x1a\x17.ResponseObjectUserData\"\x00\x12&\n\x07getList\x12\x06.Empty\x1a\x11.ResponseUserList\"\x00\x62\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x1cproto/user/client_grpc.proto\"\x07\n\x05\x45mpty\"1\n\x0b\x43urrentUser\x12\x10\n\x08username\x18\x01 \x01(\t\x12\x10\n\x08password\x18\x02 \x01(\t\"H\n\nUserToFind\x12\x10\n\x08username\x18\x01 \x01(\t\x12\x10\n\x08password\x18\x02 \x01(\t\x12\x16\n\x0eusernameToFind\x18\x03 \x01(\t\"\x83\x01\n\x0bUserRequest\x12\x15\n\rusernameAdmin\x18\x01 \x01(\t\x12\x10\n\x08username\x18\x02 \x01(\t\x12\x10\n\x08password\x18\x03 \x01(\t\x12\x0c\n\x04name\x18\x04 \x01(\t\x12\x0f\n\x07surname\x18\x05 \x01(\t\x12\r\n\x05\x65mail\x18\x06 \x01(\t\x12\x0b\n\x03\x64ni\x18\x07 \x01(\x05\"0\n\x10ResponseUserList\x12\x1c\n\x05users\x18\x01 \x03(\x0b\x32\r.UserResponse\"c\n\x16ResponseObjectUserData\x12\x1b\n\x04user\x18\x01 \x01(\x0b\x32\r.UserResponse\x12,\n\x0b\x64\x65scription\x18\x02 \x01(\x0b\x32\x17.TransactionMessageUser\"u\n\x0cUserResponse\x12\n\n\x02id\x18\x01 \x01(\x03\x12\x10\n\x08username\x18\x02 \x01(\t\x12\x0c\n\x04name\x18\x04 \x01(\t\x12\x0f\n\x07surname\x18\x05 \x01(\t\x12\x0b\n\x03\x64ni\x18\x06 \x01(\x05\x12\r\n\x05\x65mail\x18\x07 \x01(\t\x12\x0c\n\x04role\x18\x08 \x01(\t\")\n\x16TransactionMessageUser\x12\x0f\n\x07message\x18\x01 \x01(\t2\xe9\x01\n\x0buserService\x12:\n\x0f\x66indCurrentUser\x12\x0c.CurrentUser\x1a\x17.ResponseObjectUserData\"\x00\x12<\n\x12\x66indUserByUsername\x12\x0b.UserToFind\x1a\x17.ResponseObjectUserData\"\x00\x12\x38\n\rcreateNewUser\x12\x0c.UserRequest\x1a\x17.ResponseObjectUserData\"\x00\x12&\n\x07getList\x12\x06.Empty\x1a\x11.ResponseUserList\"\x00\x62\x06proto3')
 
 
 
@@ -93,15 +93,15 @@ if _descriptor._USE_C_DESCRIPTORS == False:
   _USERTOFIND._serialized_start=92
   _USERTOFIND._serialized_end=164
   _USERREQUEST._serialized_start=167
-  _USERREQUEST._serialized_end=321
-  _RESPONSEUSERLIST._serialized_start=323
-  _RESPONSEUSERLIST._serialized_end=371
-  _RESPONSEOBJECTUSERDATA._serialized_start=373
-  _RESPONSEOBJECTUSERDATA._serialized_end=472
-  _USERRESPONSE._serialized_start=474
-  _USERRESPONSE._serialized_end=591
-  _TRANSACTIONMESSAGEUSER._serialized_start=593
-  _TRANSACTIONMESSAGEUSER._serialized_end=634
-  _USERSERVICE._serialized_start=637
-  _USERSERVICE._serialized_end=870
+  _USERREQUEST._serialized_end=298
+  _RESPONSEUSERLIST._serialized_start=300
+  _RESPONSEUSERLIST._serialized_end=348
+  _RESPONSEOBJECTUSERDATA._serialized_start=350
+  _RESPONSEOBJECTUSERDATA._serialized_end=449
+  _USERRESPONSE._serialized_start=451
+  _USERRESPONSE._serialized_end=568
+  _TRANSACTIONMESSAGEUSER._serialized_start=570
+  _TRANSACTIONMESSAGEUSER._serialized_end=611
+  _USERSERVICE._serialized_start=614
+  _USERSERVICE._serialized_end=847
 # @@protoc_insertion_point(module_scope)

@@ -8,33 +8,47 @@ import NavBar from '../../components/navBar.jsx';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import CircularProgress from "@mui/material/CircularProgress";
+import { getProduct } from './api.js';
 
-const card = (
-  <React.Fragment>
-    <CardContent sx={{textAlign:"left", height:"40vh"}}>
-      <Typography sx={{ fontSize: 28, align:"right" }} color="text.secondary" gutterBottom>
-        Nombre:
-      </Typography>
-      <Typography sx={{ fontSize: 28, align:"right" }} color="text.secondary" gutterBottom>
-        Descripción:
-      </Typography>
-      <Typography sx={{ fontSize: 28, align:"right" }} color="text.secondary" gutterBottom>
-        Precio:
-      </Typography>
-      <Typography sx={{ fontSize: 28, align:"right" }} color="text.secondary" gutterBottom>
-        Cantidad disponible:
-      </Typography>
-      <Typography sx={{ fontSize: 28, align:"right" }} color="text.secondary" gutterBottom>
-        Fecha de Fabricación:
-      </Typography>
-    </CardContent>
-  </React.Fragment>
-);
 
 function Product() {
 
   let [loading, setLoading] = React.useState(false);
   let [response, setResponse] = React.useState(null);
+  
+  React.useEffect(() => {
+    const promise = getProduct(1)
+    promise.then((msg) => {
+      setResponse(msg)
+    })
+    .catch((error) => {
+      setResponse(error);
+    })
+    .finally(() => setLoading(false));
+}, []);
+  
+const card = (
+  <React.Fragment>
+    <CardContent sx={{textAlign:"left", height:"40vh"}}>
+      <Typography sx={{ fontSize: 28, align:"right" }} color="text.secondary" gutterBottom>
+        Nombre: {response.name}
+      </Typography>
+      <Typography sx={{ fontSize: 28, align:"right" }} color="text.secondary" gutterBottom>
+        Descripción: {response.description}
+      </Typography>
+      <Typography sx={{ fontSize: 28, align:"right" }} color="text.secondary" gutterBottom>
+        Precio: {response.price}
+      </Typography>
+      <Typography sx={{ fontSize: 28, align:"right" }} color="text.secondary" gutterBottom>
+        Cantidad disponible: {response.available}
+      </Typography>
+      {/* <Typography sx={{ fontSize: 28, align:"right" }} color="text.secondary" gutterBottom>
+        Fecha de Fabricación:
+      </Typography> */}
+    </CardContent>
+  </React.Fragment>
+);
+
 
   return (
     <div>

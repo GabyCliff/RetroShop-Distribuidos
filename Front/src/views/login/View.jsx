@@ -32,7 +32,7 @@ export default function Login() {
     loginAPI(data.get("email"), data.get("password"))
       .then(({token, user}) => {
         saveSession(token, user);
-        navigate("/");
+        navigate("/product");
       })
       .catch((error) => {
         setError(error);
@@ -60,7 +60,7 @@ export default function Login() {
           sm={4}
           md={7}
           sx={{
-            //   backgroundImage: `linear-gradient(#300042, #43005B), url(${getBackground()})`,
+              backgroundImage: `linear-gradient(#300042, #43005B), url(https://images.pexels.com/photos/50987/money-card-business-credit-card-50987.jpeg)`,
               backgroundSize: 'cover',
               backgroundRepeat: "no-repeat",
               backgroundPosition: "center center",
@@ -112,16 +112,10 @@ export default function Login() {
             >
               Iniciar sesión
             </Button>
-
-            <Grid container>
-              <Grid item xs>
-                <Link href="#" variant="body2">
-                  Olvide mi contraseña
-                </Link>
-              </Grid>
+            <Grid container justifyContent="flex-end">
               <Grid item>
-                <Link href="/signup" variant="body2">
-                  No tengo una cuenta
+                <Link href="/signUp" variant="body2">
+                  Crear cuenta
                 </Link>
               </Grid>
             </Grid>

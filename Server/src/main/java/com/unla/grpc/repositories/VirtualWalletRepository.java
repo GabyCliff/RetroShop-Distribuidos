@@ -13,4 +13,6 @@ public interface VirtualWalletRepository extends JpaRepository<VirtualWallet, Lo
 
     Optional<VirtualWallet> findByNumber(String number);
 
+    Optional<VirtualWallet> findByDni(String numDni);
+
 }

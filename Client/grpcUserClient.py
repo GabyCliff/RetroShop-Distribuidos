@@ -36,7 +36,7 @@ class UserClient(object):
       return self.stub.findCurrentUser(findUser)
 
    def findUserByUsername(self, user):
-      findUser = service_pb2.CurrentUser(
+      findUser = service_pb2.UserToFind(
          username = user['username'],
          password = user['password'],
          usernameToFind = user['usernameToFind']

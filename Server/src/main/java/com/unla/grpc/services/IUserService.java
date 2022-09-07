@@ -5,7 +5,7 @@ import com.unla.grpc.dtos.UserDTO;
 
 public interface IUserService {
 
-    ResponseData<UserDTO> createUser(String username, String password, UserDTO userDTO);
+    ResponseData<UserDTO> createUser(String username, UserDTO userDTO);
 
     ResponseData<UserDTO> getUser(String username, String password, String userToFind);
 
