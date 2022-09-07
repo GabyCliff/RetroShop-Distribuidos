@@ -1,6 +1,7 @@
 from flask import Flask, request
 from flask_cors import CORS, cross_origin
 from google.protobuf.json_format import MessageToJson
+from grpcProductClient import ProductClient
 from grpcVirtualValletClient import GrpcVirtualWalletClient as Grpc_vir_wal_client
 from grpcUserClient import UserClient
 
@@ -78,6 +79,29 @@ def update_v_w():
     result = grpc_vir_wal_client.v_w_update(request.json)
     return MessageToJson(result)
 
+
+#///////////// Productos /////////////////
+
+@app.route('/saveProduct', methods=['POST'])
+@cross_origin()
+def saveProduct():
+    product = ProductClient()
+    result = product.saveProduct(request.json)
+    return MessageToJson(result)
+
+@app.route('/updateProduct', methods=['POST'])
+@cross_origin()
+def updateProduct():
+    product = ProductClient()
+    result = product.updateProduct(request.json)
+    return MessageToJson(result)
+
+@app.route('/getProduct', methods=['POST'])
+@cross_origin()
+def getProduct():
+    product = ProductClient()
+    result = product.getProduct(request.json)
+    return MessageToJson(result)
 
 if __name__ == '__main__':
     app.run()

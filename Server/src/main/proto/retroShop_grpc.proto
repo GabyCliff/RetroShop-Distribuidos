@@ -23,6 +23,12 @@ service userService{
   rpc getList(Empty) returns (ResponseUserList){}
 }
 
+//PRODUCTS
+service productService{
+  rpc saveProduct(ProductSaveRequest) returns (Response){}
+  rpc updateProduct(ProductUpdateRequest) returns (Response){}
+  rpc getProduct(idProduct) returns (ProductResponse){}
+}
 
 ////Para virtual wallet
 message id{
@@ -114,5 +120,42 @@ message UserResponse{
 }
 
 message TransactionMessageUser{
+  string message = 1;
+}
+
+// Productos
+
+message idProduct{
+  int64 id = 1;
+}
+message ProductSaveRequest{
+  string name = 1;
+  string description = 2;
+  //google.protobuf.Timestamp date = 3;
+  repeated string listPhoto = 4;
+  float price = 5;
+  int32 available = 6;
+}
+
+message ProductUpdateRequest{
+  int64 id = 1;
+  string name = 2;
+  string description = 3;
+  //google.protobuf.Timestamp date = 4;
+  repeated string listPhoto = 5;
+  float price = 6;
+  int32 available = 7;
+}
+
+message ProductResponse{
+  int64 id = 1;
+  string name = 2;
+  string description = 3;
+  //google.protobuf.Timestamp date = 4;
+  float price = 5;
+  int32 available = 6;
+}
+
+message Response{
   string message = 1;
 }
