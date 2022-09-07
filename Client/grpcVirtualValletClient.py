@@ -34,7 +34,10 @@ class GrpcVirtualWalletClient(object):
    def findByNumber_v_w(sef, inputNumber):
     numberRequest = service_pb2.number( number = inputNumber['number'])
     return sef.stub.findVirtualWalletByNumber(numberRequest)
-
+    
+   def findByDni_v_w(sef, inputNumber):
+    dniRequest = service_pb2.numDni( numDni = inputNumber['numDni'])
+    return sef.stub.findOneByDni(dniRequest)
       
    def v_w_update(self, dataToUpdate):
       dataToUpdateRequest = service_pb2.DataToUpdateRequest(

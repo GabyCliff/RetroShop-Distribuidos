@@ -10,6 +10,7 @@ option java_package = "com.unla.retroshopservicegrpc.grpc";
 service virtualWalletService{
   rpc findOneById(id) returns (ResponseObjectVirtualWalletData){}
   rpc findVirtualWalletByNumber(number) returns (ResponseObjectVirtualWalletData){}
+  rpc findOneByDni(numDni) returns (ResponseObjectVirtualWalletData){}
   rpc createNewVirtualWallet(VirtualWalletRequest) returns (ResponseObjectVirtualWalletData){}
   rpc updateVirtualWallet(DataToUpdateRequest) returns (ResponseObjectVirtualWalletData){}
 
@@ -33,6 +34,10 @@ service productService{
 ////Para virtual wallet
 message id{
   int64 id = 1;
+}
+
+message numDni{
+  string numDni = 1;
 }
 
 message number{

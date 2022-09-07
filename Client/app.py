@@ -17,12 +17,6 @@ def hello():
     return "Service (OK)"
 
 #///////////// user /////////////////
-@app.route(base_url_user+'/getUsers')
-@cross_origin()
-def getUsers():
-    user = UserClient()
-    result = user.getList()
-    return MessageToJson(result)
 
 @app.route(base_url_user+'/createUser', methods=['POST'])
 @cross_origin()
@@ -69,6 +63,13 @@ def findOne_v_w_ById():
 def find_v_w_ByNumber():
     grpc_vir_wal_client = Grpc_vir_wal_client()
     result = grpc_vir_wal_client.findByNumber_v_w(request.json)
+    return MessageToJson(result)
+
+@app.route(base_url_vitual_wallet+'/findByDni', methods=['POST'])
+@cross_origin()
+def find_v_w_ByDni():
+    grpc_vir_wal_client = Grpc_vir_wal_client()
+    result = grpc_vir_wal_client.findByDni_v_w(request.json)
     return MessageToJson(result)
 
 
