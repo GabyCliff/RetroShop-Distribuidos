@@ -29,7 +29,7 @@ public class GrpcUserService extends userServiceImplBase {
         userDTO.setEmail(request.getEmail());
         userDTO.setDni(request.getDni());
 
-        ResponseData<UserDTO> userData = userService.createUser(request.getUsernameAdmin(), request.getPasswordAdmin(), userDTO);
+        ResponseData<UserDTO> userData = userService.createUser(request.getUsernameAdmin(), userDTO);
         log.info(userData.toString());
 
         responseObserver.onNext(buildGrpcUserResponse(userData));

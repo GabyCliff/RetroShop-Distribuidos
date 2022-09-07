@@ -14,19 +14,26 @@ import Snackbar from '@mui/material/Snackbar';
 import CircularProgress from "@mui/material/CircularProgress";
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import {registerAPI} from "./api";
+import { useNavigate } from 'react-router-dom';
+import { getSession } from '../../utils/session';
+
 
 export default function SignUp() {
 
   let [loading, setLoading] = React.useState(false);
   let [response, setResponse] = React.useState(null);
+  const navigate = useNavigate();
 
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     setLoading(true);
-    registerAPI(data.get("email"), data.get("password"), data.get("user"), data.get("facebook"), data.get("instagram"), data.get("whatsapp"))
+    const { username : usernameAdmin } = JSON.parse(getSession().data)
+    console.log(usernameAdmin);
+    registerAPI(usernameAdmin, data.get("username"), data.get("password"), data.get("name"), data.get("surname"), data.get("email"), data.get("dni"))
       .then((msg) => {
         setResponse(msg);
+        navigate('/');
       })
       .catch((error) => {
         setResponse(error);
@@ -67,9 +74,9 @@ export default function SignUp() {
               <TextField
                 required
                 fullWidth
-                id="user"
+                id="username"
                 label="Usuario"
-                name="user"
+                name="username"
                 autoComplete="username"
                 helperText="Todos en la plataforma te reconocerán por este nombre"
               />
@@ -78,20 +85,20 @@ export default function SignUp() {
               <TextField
                 required
                 fullWidth
-                id="nombre"
+                id="name"
                 label="Nombre"
-                name="nombre"
-                autoComplete="nombre"
+                name="name"
+                autoComplete="name"
               />
             </Grid>
             <Grid item xs={12}>
               <TextField
                 required
                 fullWidth
-                id="apellido"
+                id="surname"
                 label="Apellido"
-                name="apellido"
-                autoComplete="apellido"
+                name="surname"
+                autoComplete="surname"
               />
             </Grid>
             <Grid item xs={12}>
@@ -142,7 +149,7 @@ export default function SignUp() {
           </Grid>
           <Grid container justifyContent="flex-end">
             <Grid item>
-              <Link href="/login" variant="body2">
+              <Link href="/" variant="body2">
                 Ya tengo una cuenta
               </Link>
             </Grid>

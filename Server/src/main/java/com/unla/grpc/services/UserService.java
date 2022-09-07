@@ -39,9 +39,9 @@ public class UserService implements IUserService{
     private UserRepository userRepository;
 
     @Override
-    public ResponseData<UserDTO> createUser(String username, String password, UserDTO userDTO) {
+    public ResponseData<UserDTO> createUser(String username, UserDTO userDTO) {
 
-        if (!validateAccess(username, password, true)){
+        if (!validateAccess(username, true)){
             return new ResponseData<>(null, UserConstants.ACCESS_VALIDATION_ERROR_MESSAGE);
         }
         String requestValidation = validateUserRequest(userDTO);
@@ -60,7 +60,7 @@ public class UserService implements IUserService{
 
     @Override
     public ResponseData<UserDTO> getUser(String username, String password, String userToFind) {
-        if (!validateAccess(username, password, true)){
+        if (!validateAccess(username, true)){
             return new ResponseData<>(null, UserConstants.ACCESS_VALIDATION_ERROR_MESSAGE);
         }
         Optional<User> userResult = userRepository.findByUsername(userToFind);
@@ -107,10 +107,8 @@ public class UserService implements IUserService{
         return encrypted;
     }
 
-    private boolean validateAccess(String username, String password, boolean admin){
-        String passEncoded = encryptPass(password);
-        Optional<User> user = userRepository.findByUsernameAndPasswordAndRole(
-                username, passEncoded, admin ? "ADMIN" : "STANDARD");
+    private boolean validateAccess(String username, boolean admin){
+        Optional<User> user = userRepository.findByUsername(username);
         return user.isPresent();
     }
 

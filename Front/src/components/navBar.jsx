@@ -19,7 +19,7 @@ import {Routes, Route, useNavigate} from 'react-router-dom';
 
 const pagesUser = ['Publicar'];
 const pagesVisitor = ['Iniciar sesion', 'Crear cuenta'];
-const settings = ['Mis publicaciones', 'Logout'];
+const settings = ['Mis publicaciones','Crear Usuario', 'Logout'];
 
 function ContainerNavbar({children}) {
   return(
@@ -201,7 +201,7 @@ function Navbar() {
 		>
 		  {settings.map((setting) => (
 			<MenuItem key={setting}>
-			  <Typography onClick={() => navigate('/'+setting.toLowerCase().replace(/\s/g, ''))} textAlign="center">{setting}</Typography>
+			  <Typography onClick={() => navigate(setting !== 'Logout' ? '/'+setting.toLowerCase().replace(/\s/g, '') : '/')} textAlign="center">{setting}</Typography>
 			</MenuItem>
 		  ))}
 		</Menu>

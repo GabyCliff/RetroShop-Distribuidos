@@ -16,18 +16,22 @@ import NavBar from '../../components/navBar.jsx';
 import {getSession} from '../../utils/session'
 
 import {registerAPI, getAPI} from "./api";
+import { useNavigate } from 'react-router-dom';
 
 export default function AddWalletCredit() {
 
   let [loading, setLoading] = React.useState(false);
   let [response, setResponse] = React.useState(null);
   let [saldo, setSaldo] = React.useState(0);
+  const navigate = useNavigate();
 
   React.useEffect(() => {
     const promise = getAPI((JSON.parse(getSession().data).dni).toString())
       promise.then((msg) => {
-        console.log(msg)
-        setSaldo(msg.balance);
+        console.log('msg',msg)
+        const saldo = msg ? msg.balance : 0;
+        !msg && navigate('/addWallet')
+        setSaldo(saldo);
         setResponse(msg);
       })
       .catch((error) => {

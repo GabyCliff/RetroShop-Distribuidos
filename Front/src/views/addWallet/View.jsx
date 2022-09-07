@@ -62,7 +62,7 @@ export default function AddWalletCredit() {
           <AddCircleOutlineIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
-          Cargar billetera
+          Crear billetera virtual
         </Typography>
         <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
           <Grid container spacing={2}>

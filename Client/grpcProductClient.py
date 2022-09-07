@@ -35,9 +35,9 @@ class ProductClient(object):
       return self.stub.updateProduct(productUpdate)
 
    def getProduct(self, product):
-      id = service_pb2.idProducto(
+      idProduct = service_pb2.idProduct(
          id = product['id'],
       )
-      return self.stub.getProduct(id)
+      return self.stub.getProduct(idProduct)
 
 ProductClient()

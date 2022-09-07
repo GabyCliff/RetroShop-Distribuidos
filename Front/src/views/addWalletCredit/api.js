@@ -100,7 +100,8 @@ export function getAPI(numDni){
         })
         .then((resp) => {
             console.log(resp);
-            resolve(resp.data.virtualWalletResponse);
+            const respuesta = resp.data.description.message === 'User not found' ? false : resp.data.virtualWalletResponse
+            resolve(respuesta);
         })
         .catch((error) => {
             reject(RESPONSES[error.response.data.msg]);

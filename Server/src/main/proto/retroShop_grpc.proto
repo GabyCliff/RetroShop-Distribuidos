@@ -96,13 +96,12 @@ message UserToFind{
 
 message UserRequest{
   string usernameAdmin = 1;
-  string passwordAdmin = 2;
-  string username = 3;
-  string password = 4;
-  string name = 5;
-  string surname = 6;
-  string email = 7;
-  int32 dni = 8;
+  string username = 2;
+  string password = 3;
+  string name = 4;
+  string surname = 5;
+  string email = 6;
+  int32 dni = 7;
 }
 
 message ResponseUserList {
@@ -117,11 +116,12 @@ message ResponseObjectUserData{
 message UserResponse{
   int64 id = 1;
   string username = 2;
-  string name = 3;
-  string surname = 4;
-  int32 dni = 5;
-  string email = 6;
-  string role = 7;
+  string password = 3;
+  string name = 4;
+  string surname = 5;
+  int32 dni = 6;
+  string email = 7;
+  string role = 8;
 }
 
 message TransactionMessageUser{

@@ -35,7 +35,7 @@ export function loginAPI(email, pwd){
             })
         })
         .catch((error) => {
-            reject(RESPONSES[error.response.data.msg]);
+            reject(RESPONSES[error.response.data]);
         });
     })
 
