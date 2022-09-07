@@ -163,7 +163,7 @@ function Navbar() {
 	  </Box>
 	
 	  <Box sx={{ flexGrow: 0, mr: 2 }} onClick={() => navigate('/addWalletCredit')}>
-		  Saldo Disponible: $1000
+		  Ver/Cargar Saldo
 	  </Box>
 	  <Box sx={{ flexGrow: 1, mr: 2 }}>
 		<Search>

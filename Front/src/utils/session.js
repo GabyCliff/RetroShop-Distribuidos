@@ -3,8 +3,8 @@ export function checkSession(){
 }
 
 export function saveSession(token, data){
-    localStorage.setItem("session-token", token);
-    localStorage.setItem("session-data", data);
+    localStorage.setItem("session-token", JSON.stringify(token));
+    localStorage.setItem("session-data", JSON.stringify(data));
 }
 
 export function getSession(){

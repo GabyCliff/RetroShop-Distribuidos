@@ -13,20 +13,36 @@ import Snackbar from '@mui/material/Snackbar';
 import CircularProgress from "@mui/material/CircularProgress";
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import NavBar from '../../components/navBar.jsx';
+import {getSession} from '../../utils/session'
 
-import {registerAPI} from "./api";
+import {registerAPI, getAPI} from "./api";
 
 export default function AddWalletCredit() {
 
   let [loading, setLoading] = React.useState(false);
   let [response, setResponse] = React.useState(null);
+  let [saldo, setSaldo] = React.useState(0);
+
+  React.useEffect(() => {
+    const promise = getAPI((JSON.parse(getSession().data).dni).toString())
+      promise.then((msg) => {
+        console.log(msg)
+        setSaldo(msg.balance);
+        setResponse(msg);
+      })
+      .catch((error) => {
+        setResponse(error);
+      })
+      .finally(() => setLoading(false));
+  }, []);
 
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     setLoading(true);
-    registerAPI(data.get("email"), data.get("password"), data.get("user"), data.get("facebook"), data.get("instagram"), data.get("whatsapp"))
-      .then((msg) => {
+    const promise = registerAPI(data.get("numTarjeta"), data.get("saldoACargar"), true)
+      promise.then((msg) => {
+        setSaldo(msg.balance);
         setResponse(msg);
       })
       .catch((error) => {
@@ -64,28 +80,11 @@ export default function AddWalletCredit() {
         <Typography component="h1" variant="h5">
           Cargar crédito en la billetera
         </Typography>
+        <Typography component="h1" variant="h5">
+          Su saldo es: ${saldo}
+        </Typography>
         <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
           <Grid container spacing={2}>
-            <Grid item xs={12}>
-              <TextField
-                required
-                fullWidth
-                id="nombre"
-                label="Nombre"
-                name="nombre"
-                autoComplete="nombre"
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                required
-                fullWidth
-                id="apellido"
-                label="Apellido"
-                name="apellido"
-                autoComplete="apellido"
-              />
-            </Grid>
             <Grid item xs={12}>
               <TextField
                 required
@@ -94,26 +93,6 @@ export default function AddWalletCredit() {
                 label="Número de Tarjeta"
                 name="numTarjeta"
                 autoComplete="numTarjeta"
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                required
-                fullWidth
-                id="fechaExp"
-                label="Fecha de Vencimiento"
-                name="fechaExp"
-                autoComplete="fechaExp"
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                required
-                fullWidth
-                name="codSeguridad"
-                label="Código de Seguridad"
-                type="codSeguridad"
-                id="codSeguridad"
               />
             </Grid>
             <Grid item xs={12}>
