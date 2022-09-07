@@ -29,7 +29,7 @@ public class VirtualWallet {
 
     private String surname;
 
-    private int dni;
+    private String dni;
 
     private String validFrom;
 

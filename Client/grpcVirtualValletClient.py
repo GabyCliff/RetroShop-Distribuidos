@@ -21,7 +21,7 @@ class GrpcVirtualWalletClient(object):
             balance = virtualWallet['balance'],
             name = virtualWallet['name'],
             surname = virtualWallet['surname'],
-            dni = int(virtualWallet['dni']),
+            dni = virtualWallet['dni'],
             valid_from = virtualWallet['valid_from'],
             valid_until = virtualWallet['valid_until']
       )

@@ -23,7 +23,7 @@ message VirtualWalletRequest{
   int64 balance = 2;
   string name = 3;
   string surname = 4;
-  int32 dni = 5;
+  string dni = 5;
   string valid_from = 6;
   string valid_until = 7;
 }
@@ -45,7 +45,7 @@ message VirtualWalletResponse{
   int64 balance = 3;
   string name = 4;
   string surname = 5;
-  int32 dni = 6;
+  string dni = 6;
   string valid_from = 7;
   string valid_until = 8;
 }

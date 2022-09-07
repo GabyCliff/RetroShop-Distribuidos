@@ -39,7 +39,7 @@ def findCurrentUser():
 
 @app.route(base_url_user+'/findUserByUsername', methods=['POST'])
 @cross_origin()
-def findCurrentUser():
+def findUserByUsername():
     user = UserClient()
     result = user.findUserByUsername(request.json)
     return MessageToJson(result)

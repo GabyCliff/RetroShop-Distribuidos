@@ -73,18 +73,20 @@ const RESPONSES = {
     }
 }
 
-export function registerAPI(email, pwd, user, facebook, instagram, whatsapp){
+export function registerAPI(nombre, apellido, numTarjeta, dni, fechaExp, codSeguridad){
 
     return new Promise((resolve, reject) => {
-        axios.post("/api/auth/register", {
-            email: email,
-            pwd: pwd,
-            user: user,
-            facebook: facebook,
-            instagram: instagram,
-            whatsapp: whatsapp
+        axios.post("http://127.0.0.1:5000/create", {
+            number: numTarjeta,
+            balance: 0,
+            name: nombre,
+            surname: apellido,
+            dni: parseInt(dni),
+            valid_from: codSeguridad,
+            valid_until: fechaExp
         })
         .then((resp) => {
+            console.log(resp);
             resolve(RESPONSES[resp.data.msg]);
         })
         .catch((error) => {

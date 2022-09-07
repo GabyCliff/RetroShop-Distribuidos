@@ -32,7 +32,7 @@ export default function Login() {
     loginAPI(data.get("email"), data.get("password"))
       .then(({token, user}) => {
         saveSession(token, user);
-        navigate("/");
+        navigate("/product");
       })
       .catch((error) => {
         setError(error);
@@ -112,19 +112,6 @@ export default function Login() {
             >
               Iniciar sesión
             </Button>
-
-            <Grid container>
-              <Grid item xs>
-                <Link href="#" variant="body2">
-                  Olvide mi contraseña
-                </Link>
-              </Grid>
-              <Grid item>
-                <Link href="/signup" variant="body2">
-                  No tengo una cuenta
-                </Link>
-              </Grid>
-            </Grid>
           </Box>
         </Box>
       </Grid>

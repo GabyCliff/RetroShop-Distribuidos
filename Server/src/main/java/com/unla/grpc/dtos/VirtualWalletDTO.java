@@ -15,7 +15,7 @@ public class VirtualWalletDTO {
 
     private String surname;
 
-    private int dni;
+    private String dni;
 
     private String validFrom;
 
