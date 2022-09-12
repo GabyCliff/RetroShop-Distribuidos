@@ -12,7 +12,7 @@ CORS(app)
 base_url_user = ""
 base_url_vitual_wallet = ""#lo que se ponga acá se agrega al inicio de todas las urls
 
-@app.route('/')
+@app.route('/', methods=['GET'])
 def hello():
     return "Service (OK)"
 

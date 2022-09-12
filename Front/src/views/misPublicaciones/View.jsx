@@ -55,7 +55,6 @@ export default function MisPublicaciones() {
 
   return (
     <div>
-      <NavBar/>
       <Container component="main" sx={{pt:4}}>
         <Typography sx={{ fontSize: 28, align:"right" }} color="text.secondary" gutterBottom>
           Mis Compras

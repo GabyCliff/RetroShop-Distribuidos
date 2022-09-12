@@ -1,13 +1,13 @@
 import * as React from 'react';
-import Box from '@mui/material/Box';
-import Grid from '@mui/material/Grid';
-import Typography from '@mui/material/Typography';
+import Navbar from '../../components/navBar';
+import { Outlet } from 'react-router-dom';
 
 function Home() {
-
+	
 	return(
 		<div>
-            <h1>Holas </h1>
+            <Navbar/>
+			<Outlet/>
         </div>
 	)
 
