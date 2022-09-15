@@ -16,10 +16,12 @@ import { styled, alpha } from '@mui/material/styles';
 import InputBase from '@mui/material/InputBase';
 import { useState } from 'react';
 import {Routes, Route, useNavigate} from 'react-router-dom';
+import { useSession } from '../hooks/sessionContext/useSession';
 
 const pagesUser = ['Publicar'];
 const pagesVisitor = ['Iniciar sesion', 'Crear cuenta'];
-const settings = ['Mis publicaciones','Crear Usuario', 'Logout'];
+const settingsLogged  = ['Mis publicaciones', 'Logout'];
+const settingsUnlogged = ['Login']
 
 function ContainerNavbar({children}) {
   return(
@@ -41,7 +43,7 @@ function ContainerNavbar({children}) {
 			  textDecoration: 'none',
 			}}
 		  >
-			TIENDA ONLINE
+			RETRO SHOP
 		  </Typography>
 		  {children}
 		</Toolbar>
@@ -52,10 +54,24 @@ function ContainerNavbar({children}) {
 }
 
 function Navbar() {
-  const [isLogged, setIsLogged] = useState(true);
+  const [menuSettings, setMenuSettings] = useState(settingsUnlogged);
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const { isLogged, logoutUser} = useSession();
   const navigate = useNavigate();
+
+  React.useEffect(() => {
+	setMenuSettings(isLogged() ? settingsLogged : settingsUnlogged)
+  }, [isLogged])
+  
+  const handleSettingsMenu = (setting) => {
+	if(setting === 'Logout'){
+		return logoutUser();
+	}
+	else {
+		 return navigate('/'+setting.toLowerCase().replace(/\s/g, ''))
+	}
+  }
 
   const handleOpenNavMenu = (event) => {
 	setAnchorElNav(event.currentTarget);
@@ -106,7 +122,7 @@ function Navbar() {
 	'& .MuiInputBase-input': {
 	  padding: theme.spacing(1, 1, 1, 0),
 	  // vertical padding + font size from searchIcon
-	  paddingLeft: `calc(1em + ${theme.spacing(4)})`,
+	  paddingLeft: `calc(1em + ${theme.spacing(1)})`,
 	  transition: theme.transitions.create('width'),
 	  width: '100%',
 	  [theme.breakpoints.up('sm')]: {
@@ -119,7 +135,7 @@ function Navbar() {
   }));
 
   return (
-	isLogged ? (
+	
 	// USER NAVBAR
 	<ContainerNavbar>
 	  <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
@@ -158,13 +174,13 @@ function Navbar() {
 		  ))}
 		</Menu>
 	  </Box>
-	  <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }} onClick={() => navigate('/newProduct')}>
+	  {/* <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }} onClick={() => navigate('/newProduct')}>
 	 	 PUBLICAR
-	  </Box>
-	
+	  </Box> 
+			
 	  <Box sx={{ flexGrow: 0, mr: 2 }} onClick={() => navigate('/addWalletCredit')}>
 		  Ver/Cargar Saldo
-	  </Box>
+	  </Box>*/}
 	  <Box sx={{ flexGrow: 1, mr: 2 }}>
 		<Search>
 			<SearchIconWrapper>
@@ -199,15 +215,15 @@ function Navbar() {
 		  open={Boolean(anchorElUser)}
 		  onClose={handleCloseUserMenu}
 		>
-		  {settings.map((setting) => (
+		  {menuSettings.map((setting) => (
 			<MenuItem key={setting}>
-			  <Typography onClick={() => navigate(setting !== 'Logout' ? '/'+setting.toLowerCase().replace(/\s/g, '') : '/')} textAlign="center">{setting}</Typography>
+			  <Typography onClick={() => handleSettingsMenu(setting)} textAlign="center">{setting}</Typography>
 			</MenuItem>
 		  ))}
 		</Menu>
 	  </Box>
 	</ContainerNavbar>
-	) : (
+	 ) /*: (
 	<ContainerNavbar>
 	  <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
 		<IconButton
@@ -270,7 +286,7 @@ function Navbar() {
 	  </Box>
 	</ContainerNavbar>
 	)
-  );
+  ); */
 };
 
 export default Navbar;

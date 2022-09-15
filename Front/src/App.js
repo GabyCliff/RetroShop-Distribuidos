@@ -1,25 +1,37 @@
 import './App.css';
 import { Routes, Route, Link } from "react-router-dom";
+import SessionProvider from './hooks/sessionContext/sessionContext';
 import Home from './views/home/View.jsx';
-import SignUp from './views/signup/View.jsx';
-import Login from './views/login/View.jsx';
-import NewProduct from './views/newProduct/View.jsx';
-import AddWalletCredit from './views/addWalletCredit/View.jsx';
-import AddWallet from './views/addWallet/View.jsx';
-import Product from './views/product/View.jsx';
+import AddWalletCredit from './views/wallet/addWalletCredit/View.jsx';
+import AddWallet from './views/wallet/addWallet/View.jsx';
+import NewProduct from './views/products/newProduct/View';
+import Product from './views/products/product/View.jsx';
+import Products from './views/products/view';
+import Login from './views/user/login/View.jsx';
 import MisPublicaciones from './views/misPublicaciones/View.jsx'; 
+
 
 function App() {
   return (
     <div className="App">
       <Routes>
-        <Route path="/" element={<Login />} />
-        <Route path="/crearusuario" element={<SignUp />} />
-        <Route path="/newProduct" element={<NewProduct />} />
-        <Route path="/addWallet" element={<AddWallet />} />
-        <Route path="/addWalletCredit" element={<AddWalletCredit />} />
-        <Route path="/product" element={<Product />} />
-        <Route path="/mispublicaciones" element={<MisPublicaciones />} />
+        <Route path="/" element={
+              <SessionProvider>
+                <Home />
+              </SessionProvider>
+          }
+        >
+            <Route
+              path=""
+              element={<Products />}
+            />
+            <Route path="login" element={<Login />} />
+            <Route path="newProduct" element={<NewProduct />} />
+            <Route path="addWallet" element={<AddWallet />} />
+            <Route path="addWalletCredit" element={<AddWalletCredit />} />
+            <Route path="product" element={<Product />} />
+            <Route path="mispublicaciones" element={<MisPublicaciones />} />
+        </Route>
       </Routes>
     </div>
   );
