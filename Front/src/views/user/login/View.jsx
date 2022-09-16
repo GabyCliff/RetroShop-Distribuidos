@@ -14,7 +14,6 @@ import Snackbar from '@mui/material/Snackbar';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 
 import { useNavigate } from 'react-router-dom';
-import { fetchWithoutToken } from '../../../helpers/fetch';
 import { useSession } from '../../../hooks/sessionContext/useSession';
 
 // import {getBackground} from "../../utils/background";

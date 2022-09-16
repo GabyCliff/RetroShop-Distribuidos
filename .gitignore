@@ -6,3 +6,5 @@ Server/src/resources
 Server/bin/
 
 Front/node_modules
+Front/public/env.js
+
