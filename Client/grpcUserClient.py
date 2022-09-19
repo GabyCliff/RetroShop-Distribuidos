@@ -19,6 +19,7 @@ class UserClient(object):
    
    def createUser(self, user):
       userRequest = service_pb2.UserRequest(
+            usernameAdmin = user['usernameAdmin'],
             username = user['username'],
             password = user['password'],
             name = user['name'],
