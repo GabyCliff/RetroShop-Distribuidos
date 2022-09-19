@@ -21,10 +21,10 @@ const fetchWithoutToken = async (endpoint, data, method = 'GET') => {
 			},
 			body: JSON.stringify(data),
 		})
-			.then((response) => response.json()) 
-			.catch((error) => {
-				throw new Error(`Ocurrió un error (${error.message})`);
-			});
+		.then((response) => response.json()) 
+		.catch((error) => {
+			throw new Error(`Ocurrió un error (${error.message})`);
+		});
 	}
 };
 

@@ -8,8 +8,7 @@ import NewProduct from './views/products/newProduct/View';
 import Product from './views/products/product/View.jsx';
 import Products from './views/products/view';
 import Login from './views/user/login/View.jsx';
-import MisPublicaciones from './views/misPublicaciones/View.jsx'; 
-
+import MyProducts from './views/myProducts/View.jsx';
 
 function App() {
   return (
@@ -30,7 +29,7 @@ function App() {
             <Route path="addWallet" element={<AddWallet />} />
             <Route path="addWalletCredit" element={<AddWalletCredit />} />
             <Route path="product" element={<Product />} />
-            <Route path="mispublicaciones" element={<MisPublicaciones />} />
+            <Route path="myProducts" element={<MyProducts />} />
         </Route>
       </Routes>
     </div>
