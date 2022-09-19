@@ -101,7 +101,7 @@ def getProduct():
     result = product.getProduct(request.json)
     return MessageToJson(result)
 
-@app.route('/getByIdUser', methods=['POST'])
+@app.route('/getListProductsByIdUser', methods=['POST'])
 @cross_origin()
 def getListProductsForUser():
     #product = ProductClient()
@@ -109,7 +109,7 @@ def getListProductsForUser():
     #return MessageToJson(result)
     return MessageToJson['****************************message Falta terminar de implentar: debe Retornar una lista productos  *^************************************']
 
-@app.route('/all', methods=['POST'])
+@app.route('/allProducts', methods=['POST'])
 @cross_origin()
 def findAll():
     #product = ProductClient()
