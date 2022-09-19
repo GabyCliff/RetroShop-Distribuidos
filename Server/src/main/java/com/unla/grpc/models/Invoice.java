@@ -10,19 +10,26 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Entity(name = "VirtualWallet")
+import java.time.LocalDate;
+
+
+@Entity(name = "Invoice")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class VirtualWallet {
+public class Invoice {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Setter(AccessLevel.NONE)
     private long id;
 
-    private long balance;
+    private long idBuyer;
 
-    private long idUser;
+    private long idSeller;
+
+    private float total;
+
+    private LocalDate datePurchase;
 
 }

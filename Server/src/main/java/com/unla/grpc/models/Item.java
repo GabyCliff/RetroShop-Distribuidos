@@ -1,5 +1,6 @@
 package com.unla.grpc.models;
 
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -10,19 +11,23 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Entity(name = "VirtualWallet")
+@Entity(name = "Item")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class VirtualWallet {
+public class Item {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Setter(AccessLevel.NONE)
-    private long id;
+    long id;
 
-    private long balance;
+    long idProduct;
 
-    private long idUser;
+    long quantity;
+
+    float subtotal;
+
+    long idInvoice;
 
 }

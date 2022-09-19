@@ -1,7 +1,7 @@
 from importlib.abc import Finder
 import grpc
-import proto.product.client_grpc_pb2 as service_pb2
-import proto.product.client_grpc_pb2_grpc as service_grpc
+import proto.retroShop_grpc_pb2 as service_pb2
+import proto.retroShop_grpc_pb2_grpc as service_grpc
 
 class ProductClient(object):
    
@@ -19,7 +19,10 @@ class ProductClient(object):
             description = product['description'],
             listPhoto = product['listPhoto'],
             price = product['price'],
-            available = product['available'],
+            quantity = product['quantity'],
+            date = product['date'],
+            idUser = product['idUser'],
+            category = product['category']
       )
       return self.stub.saveProduct(productSave)
    
@@ -30,14 +33,27 @@ class ProductClient(object):
             description = product['description'],
             listPhoto = product['listPhoto'],
             price = product['price'],
-            available = product['available'],
+            quantity = product['quantity'],
+            date = product['date'],
+            idUser = product['idUser'],
+            category = product['category']
       )
       return self.stub.updateProduct(productUpdate)
 
    def getProduct(self, product):
-      idProduct = service_pb2.idProduct(
-         id = product['id'],
+      idProduct = service_pb2.IdProduct(
+         idProduct = product['idProduct'],
       )
       return self.stub.getProduct(idProduct)
+
+   def findByIdUser(self, product):
+      id_UserInP = service_pb2.IdUserInProduct(
+         idUser = product['idUser'],
+      )
+      return self.stub.findByIdUser(id_UserInP)
+
+   def getAll(self, product):
+      paramVoid = service_pb2.EmptyProduct()
+      return self.stub.getAll(paramVoid)
 
 ProductClient()
