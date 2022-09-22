@@ -27,8 +27,8 @@ export default function Login() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     const values = new FormData(event.currentTarget);
-    await loginUser(values.get("username"),values.get("password"));
-    error !== null && navigate('/') 
+    await loginUser(values.get("username"),values.get("password"))
+    error === null && navigate('/')
   };
 
   return (

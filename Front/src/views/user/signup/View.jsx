@@ -13,8 +13,8 @@ import Container from '@mui/material/Container';
 import Snackbar from '@mui/material/Snackbar';
 import CircularProgress from "@mui/material/CircularProgress";
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import {registerAPI} from "./api";
 import { useNavigate } from 'react-router-dom';
+import { fetchWithoutToken } from '../../../helpers/fetch';
 
 
 export default function SignUp() {
@@ -24,20 +24,28 @@ export default function SignUp() {
   const navigate = useNavigate();
 
   const handleSubmit = (event) => {
-   /*  event.preventDefault();
+    event.preventDefault();
     const data = new FormData(event.currentTarget);
     setLoading(true);
-    const { username : usernameAdmin } = JSON.parse(getSession().data)
-    console.log(usernameAdmin);
-    registerAPI(usernameAdmin, data.get("username"), data.get("password"), data.get("name"), data.get("surname"), data.get("email"), data.get("dni"))
-      .then((msg) => {
-        setResponse(msg);
-        navigate('/');
+    const signUpUser = {
+      username : data.get('username'),
+      password : data.get('password'),
+      name : data.get('name'),
+      surname : data.get('surname'),
+      email : data.get('email'),
+      dni : data.get('dni') 
+    }
+    fetchWithoutToken('createUser',signUpUser, 'POST')
+    .then( res => {
+      setResponse({
+        status : 'ok',
+        msg : 'Registrado correctamente'
       })
-      .catch((error) => {
-        setResponse(error);
-      })
-      .finally(() => setLoading(false)); */
+    })
+    .catch((error) => {
+      setResponse(error);
+    })
+    .finally(() => setLoading(false));
   };
 
   return (

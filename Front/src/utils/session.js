@@ -9,8 +9,8 @@ export function saveSession(token, data){
 
 export function getSession(){
     return {
-        token: localStorage.getItem("session-token"),
-        data: localStorage.getItem("session-data")
+        token: JSON.parse(localStorage.getItem("session-token")),
+        data: JSON.parse(localStorage.getItem("session-data"))
     }
 }
 

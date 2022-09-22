@@ -18,10 +18,10 @@ class ProductClient(object):
             name = product['name'],
             description = product['description'],
             listPhoto = product['listPhoto'],
-            price = product['price'],
-            quantity = product['quantity'],
+            price = float(product['price']),
+            quantity = int(product['quantity']),
             date = product['date'],
-            idUser = product['idUser'],
+            idUser = int(product['idUser']),
             category = product['category']
       )
       return self.stub.saveProduct(productSave)
@@ -32,10 +32,10 @@ class ProductClient(object):
             name = product['name'],
             description = product['description'],
             listPhoto = product['listPhoto'],
-            price = product['price'],
-            quantity = product['quantity'],
+            price = float(product['price']),
+            quantity = int(product['quantity']),
             date = product['date'],
-            idUser = product['idUser'],
+            idUser = int(product['idUser']),
             category = product['category']
       )
       return self.stub.updateProduct(productUpdate)

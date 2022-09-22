@@ -191,7 +191,6 @@ message UserToFind{
 }
 
 message UserRequest{
-  string usernameAdmin = 1;
   string username = 2;
   string password = 3;
   string name = 4;

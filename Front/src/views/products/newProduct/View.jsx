@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Alert from '@mui/material/Alert';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
@@ -12,17 +12,22 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
 
-import { fetchWithoutToken } from '../../../helpers/fetch';
-import { Chip, IconButton, Modal } from '@mui/material';
+import { Chip, FormControl, IconButton, InputLabel, MenuItem, Modal} from '@mui/material';
+import Select from '@mui/material/Select';
 import './styles.css';
 import axios from 'axios';
+import { useSession } from '../../../hooks/sessionContext/useSession';
 
 export default function NewProduct({openModal, switchModal}) {
 
   const [loading, setLoading] = useState(false);
   const [response, setResponse] = useState(null);
-  const [images, setImages] = useState(null);
+  const [images, setImages] = useState([]);
+  const [category, setCategory] = useState('')
   const [fabricationDate, setFabricationDate] = useState(null);
+  const [listUrlImages, setListUrlImages] = useState([]);
+  const [objectData, setObjectData] = useState({})
+  const { getUserId } = useSession();
 
   const saveImages = e => {
     let imagesFiles = Object.entries(e.target.files);
@@ -41,51 +46,70 @@ export default function NewProduct({openModal, switchModal}) {
     setImages((images) => images.filter((img) => img.name !== imgToDelete.name));
   };
 
-  const updateImageToCloud = async () => {
+  const updateImageToCloud = () => {
     let imagesFormData;
-    let listPhotos = [];
-
-    images.length > 0 &&
-      images.forEach( async (img) => {
-        imagesFormData = new FormData();
-        imagesFormData.append('file', img);
-        imagesFormData.append('upload_preset', 'fcjwt7om');
-        await axios.post('https://api.cloudinary.com/v1_1/sebaacr/image/upload', imagesFormData)
-        .then(res => {
-          listPhotos.push(res.data.url);
-        });
-      });
-
-    return listPhotos;
+      if(images.length > 0){
+          images.forEach(async (img, index) => {
+            imagesFormData = new FormData();
+            imagesFormData.append('file', img);
+            imagesFormData.append('upload_preset', 'fcjwt7om');
+            const resolve = await axios.post('https://api.cloudinary.com/v1_1/sebaacr/image/upload', imagesFormData)
+            .then( res => (res.data.url))
+            setTimeout(() => {
+              setListUrlImages( prev => [...prev, resolve])
+            }, (images.length * 1000));
+          });
+      }      
   }
 
+  const categoryChange = (event) => {
+    setCategory(event.target.value);
+  }
+
+  const parseToDate = (date) => {
+    let day = date.date() > 10 ? date.date() : '0'+date.date();
+    let month = parseInt(date.month())+1 > 10 ? parseInt(date.month())+1 : '0'+(parseInt(date.month())+1);
+    let year = date.year();
+    return year+'-'+month+'-'+day;
+  }
+  
   const handleSubmit = async (event) => {
     event.preventDefault();
     setLoading(true);
     const data = new FormData(event.currentTarget);
-    let listPhotos = await updateImageToCloud();
-    const objectData = {
+    setObjectData({
       name : data.get('name'),
       description : data.get('description'),
-      listPhotos,
-      price : data.get('price'),
-      available : data.get('quantity'),
-      //fabricationDate : data.get('fabricationDate'),
-    }
-    fetchWithoutToken('saveProduct', objectData, 'POST')
-    .then( res => {
-      console.log(res);
-      setResponse({ status : '', msg : 'Producto cargado correctamente'})
-      setImages([]);
-      setLoading(false);
-      switchModal();
+      price : parseFloat(data.get('price')+'.0'),
+      quantity : parseInt(data.get('quantity')),
+      date : parseToDate(fabricationDate),
+      category,
+      idUser : parseInt(getUserId())
     })
-    .catch(error => {
-      console.log('hubo un error ', error);
-    });
-    
+    updateImageToCloud();
   };
 
+  useEffect(() => {
+    if(images.length > 0 && listUrlImages.length === images.length){
+      const data = { ...objectData, listPhoto : listUrlImages}
+      
+      axios.post('http://127.0.0.1:5000/saveProduct', data)
+      .then( res => {
+        setResponse({ status : 'success', msg : 'Producto cargado correctamente'})
+        setImages([]);
+        setListUrlImages([]);
+        setTimeout(() => {
+          setLoading(false);
+          switchModal();
+          setResponse(null);
+        }, 2000);
+      })
+      .catch(error => {
+        setLoading(false);
+      }) 
+    }
+  }, [listUrlImages])
+  
   const modalStyle = {
     position: 'absolute',
     top: '50%',
@@ -107,6 +131,7 @@ export default function NewProduct({openModal, switchModal}) {
       aria-describedby="modal-modal-description"
     >
         <Box component="form" noValidate onSubmit={handleSubmit} sx={modalStyle}>
+        {response !== null && <Alert severity={response.status}>{response.msg}</Alert>}
           <Grid container  direction="row" justifyContent="end" spacing={2}>
             <Grid item xs={2}>
               <IconButton aria-label="cerrar" onClick={switchModal}>
@@ -133,7 +158,7 @@ export default function NewProduct({openModal, switchModal}) {
                 autoComplete="descripcion"
               />
             </Grid>
-            <Grid item xs={12}>
+            <Grid item xs={6}>
               <TextField
                 required
                 fullWidth
@@ -143,7 +168,7 @@ export default function NewProduct({openModal, switchModal}) {
                 autoComplete="precio"
               />
             </Grid>
-            <Grid item xs={12}>
+            <Grid item xs={6}>
               <TextField
                 required
                 fullWidth
@@ -153,10 +178,10 @@ export default function NewProduct({openModal, switchModal}) {
                 autoComplete="cantidad"
               />
             </Grid>
-            <Grid item xs={12}>
+            <Grid item xs={6}>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <DatePicker
-                    label="Fecha de fabricación"
+                    label="Fecha fabricación"
                     className='fabricationDate'
                     value={fabricationDate}
                     onChange={(newValue) => {
@@ -165,6 +190,25 @@ export default function NewProduct({openModal, switchModal}) {
                     renderInput={(params) => <TextField {...params} />}
                   />
               </LocalizationProvider>
+            </Grid>
+            <Grid item xs={6}>
+              <FormControl fullWidth>
+                  <InputLabel id="category">Categoria</InputLabel>
+                  <Select
+                    labelId="category"
+                    fullWidth
+                    id="category"
+                    value={category}
+                    label="category"
+                    onChange={categoryChange}
+                  >
+                    <MenuItem value={'Videojuego'}>Videojuego</MenuItem>
+                    <MenuItem value={'Música'}>Música</MenuItem>
+                    <MenuItem value={'Diario'}>Diario</MenuItem>
+                    <MenuItem value={'Revistas'}>Revistas</MenuItem>
+                    <MenuItem value={'Adornos'}>Adornos</MenuItem>
+                  </Select>
+              </FormControl>
             </Grid>
             <Grid item xs={12}>
               <Stack direction="row" alignItems="center" spacing={2}>

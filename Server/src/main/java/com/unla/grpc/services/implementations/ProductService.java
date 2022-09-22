@@ -51,6 +51,7 @@ public class ProductService implements IProductService {
      /*   Optional<User> user = userRepository.findById(product.getIdUser());
         if (user.isPresent()) {*/
             Product aux = modelMapper.map(product, Product.class);
+            System.out.println(product.getPhotos());
             if (product.getPhotos().size() > 5) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El producto no fue agregado porque tiene mas de 5 fotos");
             } else if (product.getPhotos().size() < 1) {

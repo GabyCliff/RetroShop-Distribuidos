@@ -2,9 +2,9 @@ import { useState } from 'react';
 import Container from '@mui/material/Container';
 import MyProductCard from './myProductCard/View';
 import { Button, Grid } from '@mui/material';
-import './styles.css';
 import { AddCircle } from '@mui/icons-material';
 import NewProduct from '../products/newProduct/View';
+import './styles.css';
 
 
 const rows = [

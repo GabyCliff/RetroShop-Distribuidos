@@ -6,7 +6,7 @@ import com.unla.retroshopservicegrpc.grpc.UserResponse;
 
 public interface IUserService {
 
-    ResponseData<UserDTO> createUser(String username, UserDTO userDTO);
+    ResponseData<UserDTO> createUser(UserDTO userDTO);
 
     ResponseData<UserDTO> getUser(String username, String password, String userToFind);
 

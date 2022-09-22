@@ -25,7 +25,7 @@ const settingsLogged  = [
 	{ name : 'Mis compras', path : 'myShoppings'},
 	{ name : 'Cerrar Sesión', path : 'logout'}
 ];
-const settingsUnlogged = ['Login']
+const settingsUnlogged = [{ name : 'Iniciar Sesión', path : 'login'}]
 
 function ContainerNavbar({children}) {
   return(

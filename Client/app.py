@@ -83,6 +83,7 @@ def update_v_w():
 @app.route('/saveProduct', methods=['POST'])
 @cross_origin()
 def saveProduct():
+    print(request.json)
     product = ProductClient()
     result = product.saveProduct(request.json)
     return MessageToJson(result)

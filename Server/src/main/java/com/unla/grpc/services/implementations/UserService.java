@@ -45,11 +45,8 @@ public class UserService implements IUserService {
     ModelMapper modelMapper = new ModelMapper();
 
     @Override
-    public ResponseData<UserDTO> createUser(String username, UserDTO userDTO) {
+    public ResponseData<UserDTO> createUser(UserDTO userDTO) {
 
-        if (!validateAccess(username, true)){
-            return new ResponseData<>(null, UserConstants.ACCESS_VALIDATION_ERROR_MESSAGE);
-        }
         String requestValidation = validateUserRequest(userDTO);
         if (!UserConstants.OK.equals(requestValidation)){
             return new ResponseData<>(null, requestValidation);
