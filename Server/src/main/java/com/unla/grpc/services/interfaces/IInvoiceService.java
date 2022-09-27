@@ -3,6 +3,7 @@ package com.unla.grpc.services.interfaces;
 import com.unla.grpc.dtos.ResponseData;
 import com.unla.grpc.dtos.InvoiceDTO;
 import com.unla.retroshopservicegrpc.grpc.InvoiceResponse;
+import java.util.List;
 
 public interface IInvoiceService {
 
@@ -19,5 +20,7 @@ public interface IInvoiceService {
     ResponseData<InvoiceDTO> update(long id, float total);
 
     public void setup(InvoiceDTO invoiceDTO);
+
+    List<InvoiceDTO> getInvoicesByBuyer(long userId);
 
 }

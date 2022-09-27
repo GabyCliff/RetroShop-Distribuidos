@@ -3,9 +3,19 @@ package com.unla.grpc.services.grpcs;
 import com.unla.grpc.dtos.ResponseData;
 import com.unla.grpc.dtos.UserDTO;
 import com.unla.grpc.services.interfaces.IUserService;
-import com.unla.retroshopservicegrpc.grpc.*;
+import com.unla.retroshopservicegrpc.grpc.CurrentUser;
+import com.unla.retroshopservicegrpc.grpc.ProductToBuy;
+import com.unla.retroshopservicegrpc.grpc.ProductsToBuy;
+import com.unla.retroshopservicegrpc.grpc.ResponseObjectUserData;
+import com.unla.retroshopservicegrpc.grpc.TransactionMessage;
+import com.unla.retroshopservicegrpc.grpc.TransactionMessageUser;
+import com.unla.retroshopservicegrpc.grpc.UserRequest;
+import com.unla.retroshopservicegrpc.grpc.UserResponse;
+import com.unla.retroshopservicegrpc.grpc.UserToFind;
 import com.unla.retroshopservicegrpc.grpc.userServiceGrpc.userServiceImplBase;
 import io.grpc.stub.StreamObserver;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 import net.devh.boot.grpc.server.service.GrpcService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -82,5 +92,23 @@ public class GrpcUserService extends userServiceImplBase {
                 .setUser(userResponse)
                 .setDescription(TransactionMessageUser.newBuilder().build())
                 .build();
+    }
+
+    @Override
+    public void buyProducts(ProductsToBuy request,
+            StreamObserver<TransactionMessage> responseObserver) {
+
+        Map<Long, Long> productsAndQuantity = new LinkedHashMap<>();
+
+        for (ProductToBuy buy : request.getProductsList()){
+            productsAndQuantity.put(buy.getProductId(), buy.getQuantity());
+        }
+
+        responseObserver.onNext(
+                TransactionMessage.newBuilder()
+                        .setMessage(userService.buyProducts(request.getUserId(), productsAndQuantity).getMessage())
+                        .build());
+        responseObserver.onCompleted();
+
     }
 }

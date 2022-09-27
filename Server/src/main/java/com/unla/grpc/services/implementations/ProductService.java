@@ -1,10 +1,19 @@
 package com.unla.grpc.services.implementations;
 import com.unla.grpc.converters.DateConverter;
+import com.unla.grpc.converters.ProductConverter;
+import com.unla.grpc.converters.UserConverter;
+import com.unla.grpc.dtos.InvoiceDTO;
+import com.unla.grpc.dtos.ItemDTO;
 import com.unla.grpc.dtos.ProductDTO;
 import com.unla.grpc.models.Product;
 import com.unla.grpc.repositories.IProductRepository;
+import com.unla.grpc.repositories.UserRepository;
+import com.unla.grpc.services.interfaces.IInvoiceService;
+import com.unla.grpc.services.interfaces.IItemService;
 import com.unla.grpc.services.interfaces.IProductService;
 import com.unla.retroshopservicegrpc.grpc.ProductResponse;
+import java.util.ArrayList;
+import java.util.stream.Collectors;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,7 +32,13 @@ public class ProductService implements IProductService {
     private IProductRepository productRepository;
 
     @Autowired
-    UserService userService;
+    private UserRepository userRepository;
+
+    @Autowired
+    private IItemService itemService;
+
+    @Autowired
+    private IInvoiceService invoiceService;
 
     @Override
     public ProductDTO getProduct(Long id) {
@@ -42,7 +57,7 @@ public class ProductService implements IProductService {
                 .setPrice(productAux.getPrice())
                 .setQuantity(productAux.getQuantity())
                 .setDate(DateConverter.LocalDate_to_String(productAux.getDate()))
-                .setUserResponse(userService.getUserResponseById(productAux.getIdUser()))
+                .setUserResponse(UserConverter.fromOptionalUser_to_UserResponse(userRepository.findById(productAux.getIdUser())))
                 .setCategory(productAux.getCategory())
                 .build();
     }
@@ -74,10 +89,20 @@ public class ProductService implements IProductService {
 
     @Override
     public List<ProductDTO> getByIdUser(long idUserInProduct) {
-        /*ListIterator<Product> productListIterator = productRepository.findByIdUser(idUserInProduct).listIterator();
-        Type listType = new TypeToken<List<ProductDTO>>(){}.getType();
-        return modelMapper.map(productListIterator, listType);*/
-        return null;
+
+        List<Product> userProducts = productRepository.findAllByIdUser(idUserInProduct);
+
+        return userProducts.stream()
+                .filter(p -> p.getQuantity() > 0)
+                .map(ProductConverter::fromProduct_to_ProductDTO)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<ProductDTO> getAllByListIds(List<Long> ids) {
+        return productRepository.findAllByIdIn(ids).stream().map(
+                ProductConverter::fromProduct_to_ProductDTO).collect(
+                Collectors.toList());
     }
 
     @Override

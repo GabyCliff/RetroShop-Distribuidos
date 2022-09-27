@@ -10,11 +10,15 @@ import java.util.List;
 @Repository("productService")
 public interface IProductService {
 
-    public ProductDTO getProduct(Long id);
-    public ResponseEntity<String> saveProduct(ProductDTO product);
-    public ResponseEntity<String> updateProduct(ProductDTO product, long id);
+    ProductDTO getProduct(Long id);
+
+    ResponseEntity<String> saveProduct(ProductDTO product);
+
+    ResponseEntity<String> updateProduct(ProductDTO product, long id);
 
     List<ProductDTO> getByIdUser(long idUserInProduct);
+
+    List<ProductDTO> getAllByListIds(List<Long> ids);
 
     ProductResponse getProductResponseById(long id);
 

@@ -1,12 +1,17 @@
 package com.unla.grpc.services.grpcs;
 
+import com.unla.grpc.dtos.ItemBoughtDTO;
 import com.unla.grpc.dtos.ItemDTO;
+import com.unla.grpc.dtos.ProductDTO;
 import com.unla.grpc.dtos.ResponseData;
 import com.unla.grpc.services.implementations.InvoiceService;
 import com.unla.grpc.services.implementations.ProductService;
 import com.unla.grpc.services.interfaces.IItemService;
 import com.unla.retroshopservicegrpc.grpc.*;
 import io.grpc.stub.StreamObserver;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import net.devh.boot.grpc.server.service.GrpcService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -105,5 +110,42 @@ public class GrpcItemService extends itemServiceGrpc.itemServiceImplBase{
         return ResponseObjectItemDataList.newBuilder()
                 .build();
     }
-    
+
+    @Override
+    public void getBoughtItems(IdUserBuyer request,
+            StreamObserver<ItemsBoughtList> responseObserver) {
+
+        List<ItemBoughtDTO> items = iItemService.getAllBoughtItems(request.getIdUserBuyer());
+
+        List<ItemBoughtResponse> responses = new ArrayList<>();
+
+        for (ItemBoughtDTO item : items){
+
+            ProductBasicResponse basic = ProductBasicResponse.newBuilder()
+                    .setId(item.getProduct().getId())
+                    .setName(item.getProduct().getName())
+                    .setDescription(item.getProduct().getDescription())
+                    .addAllListPhoto(item.getProduct().getPhotos())
+                    .setPrice(item.getProduct().getPrice())
+                    .setQuantity(item.getProduct().getQuantity())
+                    .setDate(item.getProduct().getDate().toString())
+                    .setCategory(item.getProduct().getCategory())
+                    .build();
+
+            ItemBoughtResponse iBought = ItemBoughtResponse.newBuilder()
+                    .setProduct(basic)
+                    .setId(item.getId())
+                    .setQuantity(item.getQuantity())
+                    .setSubTotal(item.getSubtotal())
+                    .build();
+
+            responses.add(iBought);
+        }
+
+        ItemsBoughtList response = ItemsBoughtList.newBuilder().addAllItems(responses).build();
+
+        responseObserver.onNext(response);
+        responseObserver.onCompleted();
+
+    }
 }

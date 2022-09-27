@@ -2,16 +2,30 @@ package com.unla.grpc.services.implementations;
 
 import com.unla.grpc.constants.UserConstants;
 import com.unla.grpc.converters.UserConverter;
+import com.unla.grpc.dtos.InvoiceDTO;
+import com.unla.grpc.dtos.ItemDTO;
+import com.unla.grpc.dtos.ProductDTO;
 import com.unla.grpc.dtos.ResponseData;
 import com.unla.grpc.dtos.UserDTO;
 import com.unla.grpc.models.User;
 import com.unla.grpc.repositories.UserRepository;
+import com.unla.grpc.services.interfaces.IInvoiceService;
+import com.unla.grpc.services.interfaces.IItemService;
+import com.unla.grpc.services.interfaces.IProductService;
 import com.unla.grpc.services.interfaces.IUserService;
+import com.unla.grpc.services.interfaces.IVirtualWalletService;
 import com.unla.grpc.utils.AESUtils;
+import com.unla.retroshopservicegrpc.grpc.UserResponse;
 import java.nio.charset.StandardCharsets;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Optional;
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
@@ -19,8 +33,6 @@ import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
-
-import com.unla.retroshopservicegrpc.grpc.UserResponse;
 import org.apache.commons.lang3.StringUtils;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +53,18 @@ public class UserService implements IUserService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private IItemService itemService;
+
+    @Autowired
+    private IInvoiceService invoiceService;
+
+    @Autowired
+    private IProductService productService;
+
+    @Autowired
+    private IVirtualWalletService walletService;
 
     ModelMapper modelMapper = new ModelMapper();
 
@@ -83,6 +107,53 @@ public class UserService implements IUserService {
                                 UserConstants.OK))
                 .orElseGet(
                         () -> new ResponseData<>(null, UserConstants.USER_NOT_FOUND_ERROR_MESSAGE));
+    }
+
+    @Override
+    public ResponseData<String> buyProducts(long userId, Map<Long, Long> productAndQuantity) {
+
+        Map<Long, List<ProductDTO>> sellers = new LinkedHashMap<>();
+        float totalADescontarWallet = 0;
+
+        //Me traigo todos los productos que coincidan con los ids de la lista
+        List<ProductDTO> productDTOS = productService.getAllByListIds(new ArrayList<>(productAndQuantity.keySet()));
+
+        //Itero todos los productos y los colecciono en un map agrupandolos por sellerId
+        for (ProductDTO prod : productDTOS){
+            sellers.putIfAbsent(prod.getIdUser(), new ArrayList<>());
+            sellers.get(prod.getIdUser()).add(prod);
+        }
+
+        //Itero el map agrupado
+        for (Entry<Long, List<ProductDTO>> entry : sellers.entrySet()){
+            float total = 0;
+
+            //Calculo el total del invoice iterando los productos de un seller en particular
+            for (ProductDTO prod : entry.getValue()){
+                total = total + (prod.getPrice() * productAndQuantity.get(prod.getId()));
+            }
+            //Creo el nuevo invoice para ese seller
+            ResponseData<InvoiceDTO> invoiceResponse = invoiceService.createNewInvoice(
+                    new InvoiceDTO(0, userId, entry.getKey(), total, LocalDate.now()));
+            //Itero todos los productos de ese seller y creo los items, luego hago el update de las cantidades
+            for (ProductDTO prod : entry.getValue()){
+                itemService.createItem(
+                        new ItemDTO(0, prod.getId(), productAndQuantity.get(prod.getId()),
+                                prod.getPrice()*productAndQuantity.get(prod.getId()),
+                                invoiceResponse.getData().getId()));
+                prod.setQuantity(prod.getQuantity() - productAndQuantity.get(prod.getId()));
+                productService.updateProduct(prod, prod.getId());
+            }
+
+            totalADescontarWallet = totalADescontarWallet + total;
+        }
+
+        if (walletService.getByIdUser(userId).getData().getBalance() < totalADescontarWallet){
+            return new ResponseData<>("", "Fondos Insuficientes");
+        }
+
+        walletService.update(userId, false, (long)totalADescontarWallet);
+        return new ResponseData<>("OK", "Compra realizada satisfactoriamente");
     }
 
     @Override
