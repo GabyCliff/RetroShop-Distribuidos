@@ -14,7 +14,6 @@ import Snackbar from '@mui/material/Snackbar';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 
 import { useNavigate } from 'react-router-dom';
-import { fetchWithoutToken } from '../../../helpers/fetch';
 import { useSession } from '../../../hooks/sessionContext/useSession';
 
 // import {getBackground} from "../../utils/background";
@@ -25,16 +24,16 @@ export default function Login() {
   let navigate = useNavigate();
   const { loginUser , error } = useSession(); 
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const values = new FormData(event.currentTarget);
-    loginUser(values.get("username"),values.get("password"));
-    navigate('/');
+    await loginUser(values.get("username"),values.get("password"))
+    error === null && navigate('/')
   };
 
   return (
     <Grid container component="main" sx={{ height: '100vh' }}>
-      {error != null ?
+      {error !== null &&
         <Snackbar
           open={error != null}
           anchorOrigin={{vertical: "top", horizontal:"center"}}
@@ -43,7 +42,7 @@ export default function Login() {
         >
           <Alert severity={error.status} sx={{ width: '100%' }}> {error.msg} </Alert> 
          </Snackbar> 
-        : <></> }
+      }
       
       <CssBaseline />
       <Grid

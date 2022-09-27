@@ -1,7 +1,6 @@
 package com.unla.grpc.models;
 
 import lombok.Data;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -10,7 +9,6 @@ import java.util.List;
 @Entity(name = "product")
 @Data
 public class Product {
-
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,6 +27,15 @@ public class Product {
     private float price;
 
     @Column
-    private int available;
+    private long quantity;
+
+    @Column
+    private LocalDate date;
+
+    @Column
+    private long idUser;
+
+    @Column
+    private String category;
 
 }

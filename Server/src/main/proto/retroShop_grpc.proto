@@ -6,14 +6,30 @@ option java_package = "com.unla.retroshopservicegrpc.grpc";
 
 //defino los servicios
 
+////Factura
+service invoiceService{
+  rpc findOneById(IdInvoice) returns (ResponseObjectInvoiceData){}
+  rpc findListByIdBuyer(IdUserBuyer) returns (ResponseObjectInvoiceDataList){}
+  rpc findListByIdSeller(IdUserSeller) returns (ResponseObjectInvoiceDataList){}
+  rpc findListByDatePurchase(DatePurchase) returns (ResponseObjectInvoiceDataList){}
+  rpc createNewInvoice(InvoiceRequest) returns (ResponseObjectInvoiceData){}
+  rpc updateInvoice(DataInvoiceToUpdateRequest) returns (ResponseObjectInvoiceData){}
+}
+
+////Item
+service itemService{
+  rpc findOneById(IdItem) returns (ResponseObjectItemData){}
+  rpc findListByIdInvoice(IdInvoiceInItem) returns (ResponseObjectItemDataList){}
+  rpc createNewItem(ItemRequest) returns (ResponseObjectItemData){}
+  rpc updateItem(DataItemToUpdateRequest) returns (ResponseObjectItemData){}
+}
+
 /////virtual wallet
 service virtualWalletService{
-  rpc findOneById(id) returns (ResponseObjectVirtualWalletData){}
-  rpc findVirtualWalletByNumber(number) returns (ResponseObjectVirtualWalletData){}
-  rpc findOneByDni(numDni) returns (ResponseObjectVirtualWalletData){}
+  rpc findOneById(IdVirtualWallet) returns (ResponseObjectVirtualWalletData){}
+  rpc findByIdUser(IdUserInVW) returns (ResponseObjectVirtualWalletData){}
   rpc createNewVirtualWallet(VirtualWalletRequest) returns (ResponseObjectVirtualWalletData){}
   rpc updateVirtualWallet(DataToUpdateRequest) returns (ResponseObjectVirtualWalletData){}
-
 }
 
 //////USER
@@ -28,34 +44,125 @@ service userService{
 service productService{
   rpc saveProduct(ProductSaveRequest) returns (Response){}
   rpc updateProduct(ProductUpdateRequest) returns (Response){}
-  rpc getProduct(idProduct) returns (ProductResponse){}
+  rpc getProduct(IdProduct) returns (ProductResponse){}
+  rpc findByIdUser(IdUserInProduct) returns (ProductResponseList){}
+  rpc getAll(EmptyProduct) returns (ProductResponseList){}
+}
+
+////Para factura
+message IdInvoice{
+  int64 idInvoice = 1;
+}
+
+message IdUserBuyer{
+  int64 idUserBuyer = 1;
+}
+
+message IdUserSeller{
+  int64 idUserSeller = 1;
+}
+
+message DatePurchase{
+  string datePurchase = 1;
+}
+
+message InvoiceRequest{
+  int64 idUserBuyer = 1;
+  int64 idUserSeller = 2;
+  float total = 3;
+  string datePurchase = 5;
+}
+
+message InvoiceResponse{
+  int64 id = 1;
+  float total = 2;
+  string datePurchase = 3;
+  UserResponse userBuyer = 4;
+  UserResponse userSeller = 5;
+}
+
+message DataInvoiceToUpdateRequest{
+  int64 id = 1;
+  float total = 2;
+}
+
+message ResponseObjectInvoiceDataList{
+  repeated InvoiceResponse invoiceResponses = 1;
+}
+
+message ResponseObjectInvoiceData{
+  InvoiceResponse invoiceResponse = 1;
+  TransactionMessageInvoice description = 2;
+}
+
+message TransactionMessageInvoice{
+  string message = 1;
+}
+
+
+/////Para ítem
+message IdItem{
+  int64 idItem = 1;
+}
+
+message IdInvoiceInItem{
+    int64 idInvoice = 1;
+}
+
+message ItemRequest{
+  int64 idProduct = 1;
+  int64 quantity = 2;
+  float subTotal = 3;
+  int64 idInvoice = 5;
+}
+
+message ItemResponse{
+  int64 id = 1;
+  int64 quantity = 2;
+  float subTotal = 3;
+  ProductResponse productResponse = 4;
+  InvoiceResponse invoiceResponse = 5;
+}
+
+message DataItemToUpdateRequest{
+  int64 id = 1;
+  int64 quantity = 2;
+  float subTotal = 3;
+}
+
+message ResponseObjectItemDataList{
+  repeated InvoiceResponse itemResponses = 1;
+}
+
+message ResponseObjectItemData{
+  ItemResponse itemResponse = 1;
+  TransactionMessageItem description = 2;
+}
+
+message TransactionMessageItem{
+  string message = 1;
 }
 
 ////Para virtual wallet
-message id{
-  int64 id = 1;
+message IdVirtualWallet{
+  int64 idVirWall = 1;
 }
-
-message numDni{
-  string numDni = 1;
+message IdUserInVW{
+  int64 idUser = 1;
 }
-
-message number{
-  string number = 1;
-}
-
 message VirtualWalletRequest{
-  string number = 1;
+  int64 balance = 1;
+  int64 idUser = 2;
+}
+
+message VirtualWalletResponse{
+  int64  id = 1;
   int64 balance = 2;
-  string name = 3;
-  string surname = 4;
-  string dni = 5;
-  string valid_from = 6;
-  string valid_until = 7;
+  UserResponse userResponse = 3;
 }
 
 message DataToUpdateRequest{
-  string number = 1;
+  int64 idUser = 1;
   bool is_money_income= 2;
   int64 value = 3;
 }
@@ -63,17 +170,6 @@ message DataToUpdateRequest{
 message ResponseObjectVirtualWalletData{
   VirtualWalletResponse virtualWalletResponse = 1;
   TransactionMessage description = 2;
-}
-
-message VirtualWalletResponse{
-  int64 id = 1;
-  string number = 2;
-  int64 balance = 3;
-  string name = 4;
-  string surname = 5;
-  string dni = 6;
-  string valid_from = 7;
-  string valid_until = 8;
 }
 
 message TransactionMessage{
@@ -95,13 +191,23 @@ message UserToFind{
 }
 
 message UserRequest{
-  string usernameAdmin = 1;
   string username = 2;
   string password = 3;
   string name = 4;
   string surname = 5;
   string email = 6;
   int32 dni = 7;
+}
+
+message UserResponse{
+  int64 id = 1;
+  string name = 2;
+  string surname = 3;
+  int32 dni = 4;
+  string email = 5;
+  string username = 6;
+  string password = 7;
+  string role = 8;
 }
 
 message ResponseUserList {
@@ -113,52 +219,58 @@ message ResponseObjectUserData{
   TransactionMessageUser description = 2;
 }
 
-message UserResponse{
-  int64 id = 1;
-  string username = 2;
-  string password = 3;
-  string name = 4;
-  string surname = 5;
-  int32 dni = 6;
-  string email = 7;
-  string role = 8;
-}
-
 message TransactionMessageUser{
   string message = 1;
 }
 
 // Productos
+message EmptyProduct {}
 
-message idProduct{
-  int64 id = 1;
+message IdUserInProduct{
+  int64 idUser = 1;
 }
+
+message IdProduct{
+  int64 idProduct = 1;
+}
+
 message ProductSaveRequest{
   string name = 1;
   string description = 2;
-  //google.protobuf.Timestamp date = 3;
-  repeated string listPhoto = 4;
-  float price = 5;
-  int32 available = 6;
+  repeated string listPhoto = 3;
+  float price = 4;
+  int64 quantity = 5;
+  string date = 6;
+  int64 idUser = 7;
+  string category = 8;
 }
 
 message ProductUpdateRequest{
   int64 id = 1;
   string name = 2;
   string description = 3;
-  //google.protobuf.Timestamp date = 4;
-  repeated string listPhoto = 5;
-  float price = 6;
-  int32 available = 7;
+  repeated string listPhoto = 4;
+  float price = 5;
+  int64 quantity = 6;
+  string date = 7;
+  int64 idUser = 8;
+  string category = 9;
 }
 
 message ProductResponse{
   int64 id = 1;
   string name = 2;
   string description = 3;
-  //google.protobuf.Timestamp date = 4;
+  repeated string listPhoto = 4;
   float price = 5;
-  int32 available = 6;
+  int64 quantity = 6;
+  string date = 7;
+  string category = 8;
+  UserResponse userResponse = 9;
+}
+
+message ProductResponseList{
+  repeated ProductResponse productResponses = 1;
 }
 
 message Response{

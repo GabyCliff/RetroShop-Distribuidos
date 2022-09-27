@@ -20,8 +20,12 @@ import { useSession } from '../hooks/sessionContext/useSession';
 
 const pagesUser = ['Publicar'];
 const pagesVisitor = ['Iniciar sesion', 'Crear cuenta'];
-const settingsLogged  = ['Mis publicaciones', 'Logout'];
-const settingsUnlogged = ['Login']
+const settingsLogged  = [
+	{ name : 'Mis productos', path : 'myProducts'},
+	{ name : 'Mis compras', path : 'myShoppings'},
+	{ name : 'Cerrar Sesión', path : 'logout'}
+];
+const settingsUnlogged = [{ name : 'Iniciar Sesión', path : 'login'}]
 
 function ContainerNavbar({children}) {
   return(
@@ -69,7 +73,7 @@ function Navbar() {
 		return logoutUser();
 	}
 	else {
-		 return navigate('/'+setting.toLowerCase().replace(/\s/g, ''))
+		return navigate('/'+setting.path.toLowerCase().replace(/\s/g, ''))
 	}
   }
 
@@ -215,9 +219,9 @@ function Navbar() {
 		  open={Boolean(anchorElUser)}
 		  onClose={handleCloseUserMenu}
 		>
-		  {menuSettings.map((setting) => (
-			<MenuItem key={setting}>
-			  <Typography onClick={() => handleSettingsMenu(setting)} textAlign="center">{setting}</Typography>
+		  {menuSettings.map((setting,index) => (
+			<MenuItem key={index}>
+			  <Typography onClick={() => handleSettingsMenu(setting)} textAlign="center" >{setting.name}</Typography>
 			</MenuItem>
 		  ))}
 		</Menu>

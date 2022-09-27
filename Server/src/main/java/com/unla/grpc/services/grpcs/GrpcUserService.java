@@ -2,7 +2,7 @@ package com.unla.grpc.services.grpcs;
 
 import com.unla.grpc.dtos.ResponseData;
 import com.unla.grpc.dtos.UserDTO;
-import com.unla.grpc.services.IUserService;
+import com.unla.grpc.services.interfaces.IUserService;
 import com.unla.retroshopservicegrpc.grpc.*;
 import com.unla.retroshopservicegrpc.grpc.userServiceGrpc.userServiceImplBase;
 import io.grpc.stub.StreamObserver;
@@ -29,7 +29,7 @@ public class GrpcUserService extends userServiceImplBase {
         userDTO.setEmail(request.getEmail());
         userDTO.setDni(request.getDni());
 
-        ResponseData<UserDTO> userData = userService.createUser(request.getUsernameAdmin(), userDTO);
+        ResponseData<UserDTO> userData = userService.createUser(userDTO);
         log.info(userData.toString());
 
         responseObserver.onNext(buildGrpcUserResponse(userData));

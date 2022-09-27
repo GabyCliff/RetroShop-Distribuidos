@@ -1,8 +1,8 @@
 package com.unla.grpc.services.grpcs;
 
+import com.unla.grpc.converters.DateConverter;
 import com.unla.grpc.dtos.ProductDTO;
-import com.unla.grpc.services.ProductService;
-import com.unla.grpc.*;
+import com.unla.grpc.services.implementations.ProductService;
 import com.unla.retroshopservicegrpc.grpc.*;
 import io.grpc.stub.StreamObserver;
 import net.devh.boot.grpc.server.service.GrpcService;
@@ -24,7 +24,10 @@ public class GrpcProductService extends productServiceGrpc.productServiceImplBas
         productAux.setDescription(request.getDescription());
         productAux.setPhotos(request.getListPhotoList());
         productAux.setPrice(request.getPrice());
-        productAux.setAvailable(request.getAvailable());
+        productAux.setQuantity(request.getQuantity());
+        productAux.setDate(DateConverter.fromString_to_LocalDate(request.getDate()));
+        productAux.setIdUser(request.getIdUser());
+        productAux.setCategory(request.getCategory());
 
         HttpStatus state = productService.saveProduct(productAux).getStatusCode();
 
@@ -45,7 +48,11 @@ public class GrpcProductService extends productServiceGrpc.productServiceImplBas
         productAux.setDescription(request.getDescription());
         productAux.setPhotos(request.getListPhotoList());
         productAux.setPrice(request.getPrice());
-        productAux.setAvailable(request.getAvailable());
+        productAux.setQuantity(request.getQuantity());
+        productAux.setQuantity(request.getQuantity());
+        productAux.setDate(DateConverter.fromString_to_LocalDate(request.getDate()));
+        productAux.setIdUser(request.getIdUser());
+        productAux.setCategory(request.getCategory());
 
         HttpStatus state = productService.saveProduct(productAux).getStatusCode();
 
@@ -58,16 +65,26 @@ public class GrpcProductService extends productServiceGrpc.productServiceImplBas
     }
 
     @Override
-    public void getProduct(idProduct request, StreamObserver<ProductResponse> responseObserver) {
-        ProductDTO productAux = productService.getProduct(request.getId());
+    public void getProduct(IdProduct request, StreamObserver<ProductResponse> responseObserver) {
+        ProductDTO productAux = productService.getProduct(request.getIdProduct());
+        setAttributesProductResponse(productAux, responseObserver);
+    }
 
-        ProductResponse productResponse = ProductResponse.newBuilder()
-                .setName(productAux.getName())
-                .setDescription(productAux.getDescription())
-                .setPrice(productAux.getPrice())
-                .setAvailable(productAux.getAvailable()).build();
+    @Override
+    public void findByIdUser(IdUserInProduct request, StreamObserver<ProductResponseList> responseObserver) {
+        super.findByIdUser(request, responseObserver);
+       // List<ProductDTO> productDTOList = productService.getByIdUser(request.getIdUser());
+    }
 
+    @Override
+    public void getAll(EmptyProduct request, StreamObserver<ProductResponseList> responseObserver) {
+        super.getAll(request, responseObserver);
+    }
+
+    public void setAttributesProductResponse(ProductDTO productAux, StreamObserver<ProductResponse> responseObserver){
+        ProductResponse productResponse = productService.getProductResponseById(productAux.getId());
         responseObserver.onNext(productResponse);
         responseObserver.onCompleted();
     }
+
 }

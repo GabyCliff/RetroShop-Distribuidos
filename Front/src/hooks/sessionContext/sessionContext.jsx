@@ -10,6 +10,7 @@ const SessionProvider = ({children}) => {
     
     const isLogged = () => getSession().data !== null ? true : false; 
     const getRole = (role) => role && userSession?.rol === role;
+    const getUserId = () => getSession().data.id;
 
     const loginUser = async (username,password) => {
         try{
@@ -46,7 +47,8 @@ const SessionProvider = ({children}) => {
         logoutUser,
         error,
         isLogged,
-        getRole
+        getRole,
+        getUserId
 	};
 
     return (

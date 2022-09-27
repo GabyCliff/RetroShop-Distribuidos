@@ -1,10 +1,9 @@
 package com.unla.grpc.controllers;
 
 
-import com.unla.grpc.constants.VirtualWalletConstants;
+import com.unla.grpc.constants.Constants;
 import com.unla.grpc.dtos.VirtualWalletDTO;
-import com.unla.grpc.models.VirtualWallet;
-import com.unla.grpc.services.IVirtualWalletService;
+import com.unla.grpc.services.interfaces.IVirtualWalletService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -21,6 +20,6 @@ public class VirtualWalletController {
     @PostMapping
     public String createVirtualWallet(@RequestBody VirtualWalletDTO virtualWalletDTO){
         iVirtualWalletService.setup(virtualWalletDTO);
-        return VirtualWalletConstants.SETUP_OK;
+        return Constants.SETUP_OK;
     }
 }

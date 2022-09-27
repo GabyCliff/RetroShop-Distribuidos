@@ -2,7 +2,8 @@ package com.unla.grpc.services.grpcs;
 
 import com.unla.grpc.dtos.ResponseData;
 import com.unla.grpc.dtos.VirtualWalletDTO;
-import com.unla.grpc.services.IVirtualWalletService;
+import com.unla.grpc.services.interfaces.IVirtualWalletService;
+import com.unla.grpc.services.implementations.UserService;
 import com.unla.retroshopservicegrpc.grpc.*;
 import io.grpc.stub.StreamObserver;
 import lombok.extern.slf4j.Slf4j;
@@ -15,18 +16,16 @@ public class GrpcVirtualWalletService extends virtualWalletServiceGrpc.virtualWa
     @Autowired
     private IVirtualWalletService iVirtualWalletService;
 
+    @Autowired
+    UserService userService;
+
     @Override
     public void createNewVirtualWallet(VirtualWalletRequest request, StreamObserver<ResponseObjectVirtualWalletData> responseObserver) {
         VirtualWalletDTO virtualWalletDTO = new VirtualWalletDTO();
-        virtualWalletDTO.setNumber(request.getNumber());
+        virtualWalletDTO.setIdUser(request.getIdUser());
         virtualWalletDTO.setBalance(request.getBalance());
-        virtualWalletDTO.setName(request.getName());
-        virtualWalletDTO.setSurname(request.getSurname());
-        virtualWalletDTO.setDni(request.getDni());
-        virtualWalletDTO.setValidFrom(request.getValidFrom());
-        virtualWalletDTO.setValidUntil(request.getValidUntil());
 
-        ResponseData<VirtualWalletDTO> virtualWalletDTOResponseData = iVirtualWalletService.createVirtualWallet(request.getNumber(), request.getBalance(), request.getName(), request.getSurname(), virtualWalletDTO);
+        ResponseData<VirtualWalletDTO> virtualWalletDTOResponseData = iVirtualWalletService.createVirtualWallet(virtualWalletDTO);
         log.info(virtualWalletDTOResponseData.toString());
 
         responseObserver.onNext(buildGrpcVirtualWallet(virtualWalletDTOResponseData));
@@ -34,9 +33,9 @@ public class GrpcVirtualWalletService extends virtualWalletServiceGrpc.virtualWa
     }
 
     @Override
-    public void findOneById(id request, StreamObserver<ResponseObjectVirtualWalletData> responseObserver) {
+    public void findOneById(IdVirtualWallet request, StreamObserver<ResponseObjectVirtualWalletData> responseObserver) {
         //super.findOneById(request, responseObserver);
-        ResponseData<VirtualWalletDTO> virtualWalletDTOResponseData = iVirtualWalletService.getVirtualWalletById(request.getId());
+        ResponseData<VirtualWalletDTO> virtualWalletDTOResponseData = iVirtualWalletService.getById(request.getIdVirWall());
         log.info(virtualWalletDTOResponseData.toString());
 
         responseObserver.onNext(buildGrpcVirtualWallet(virtualWalletDTOResponseData));
@@ -44,18 +43,9 @@ public class GrpcVirtualWalletService extends virtualWalletServiceGrpc.virtualWa
     }
 
     @Override
-    public void findOneByDni(numDni request, StreamObserver<ResponseObjectVirtualWalletData> responseObserver) {
+    public void findByIdUser(IdUserInVW request, StreamObserver<ResponseObjectVirtualWalletData> responseObserver) {
         //super.findOneByDni(request, responseObserver);
-        ResponseData<VirtualWalletDTO> virtualWalletDTOResponseData = iVirtualWalletService.getVirtualWalletByDni(request.getNumDni());
-        log.info(virtualWalletDTOResponseData.toString());
-
-        responseObserver.onNext(buildGrpcVirtualWallet(virtualWalletDTOResponseData));
-        responseObserver.onCompleted();
-    }
-    @Override
-    public void findVirtualWalletByNumber(number request, StreamObserver<ResponseObjectVirtualWalletData> responseObserver) {
-        //super.findVirtualWalletByNumber(request, responseObserver);
-        ResponseData<VirtualWalletDTO> virtualWalletDTOResponseData = iVirtualWalletService.getVirtualWalletByNumber(request.getNumber());
+        ResponseData<VirtualWalletDTO> virtualWalletDTOResponseData = iVirtualWalletService.getByIdUser(request.getIdUser());
         log.info(virtualWalletDTOResponseData.toString());
 
         responseObserver.onNext(buildGrpcVirtualWallet(virtualWalletDTOResponseData));
@@ -64,8 +54,9 @@ public class GrpcVirtualWalletService extends virtualWalletServiceGrpc.virtualWa
 
     @Override
     public void updateVirtualWallet(DataToUpdateRequest request, StreamObserver<ResponseObjectVirtualWalletData> responseObserver) {
-        ResponseData<VirtualWalletDTO> virtualWalletDTOResponseData = iVirtualWalletService.updateVirtualWallet(request.getNumber(),
-                request.getIsMoneyIncome(), request.getValue());
+        ResponseData<VirtualWalletDTO> virtualWalletDTOResponseData = iVirtualWalletService.update(
+                request.getIdUser(), request.getIsMoneyIncome(), request.getValue()
+        );
         log.info(virtualWalletDTOResponseData.toString());
         if(!virtualWalletDTOResponseData.isEmptyData()){
             responseObserver.onNext(buildGrpcVirtualWallet(virtualWalletDTOResponseData));
@@ -76,18 +67,14 @@ public class GrpcVirtualWalletService extends virtualWalletServiceGrpc.virtualWa
     }
 
 
-    private ResponseObjectVirtualWalletData buildGrpcVirtualWallet(ResponseData<VirtualWalletDTO> virtualWalletDTOResponseData){
+    private ResponseObjectVirtualWalletData buildGrpcVirtualWallet(
+            ResponseData<VirtualWalletDTO> virtualWalletDTOResponseData){
         VirtualWalletResponse virtualWalletResponse = VirtualWalletResponse.newBuilder().build();
         if(!virtualWalletDTOResponseData.isEmptyData()){
             virtualWalletResponse = VirtualWalletResponse.newBuilder()
                     .setId(virtualWalletDTOResponseData.getData().getId())
-                    .setNumber(virtualWalletDTOResponseData.getData().getNumber())
                     .setBalance(virtualWalletDTOResponseData.getData().getBalance())
-                    .setName(virtualWalletDTOResponseData.getData().getName())
-                    .setSurname(virtualWalletDTOResponseData.getData().getSurname())
-                    .setDni(virtualWalletDTOResponseData.getData().getDni())
-                    .setValidFrom(virtualWalletDTOResponseData.getData().getValidFrom())
-                    .setValidUntil(virtualWalletDTOResponseData.getData().getValidUntil())
+                    .setUserResponse(userService.getUserResponseById(virtualWalletDTOResponseData.getData().getIdUser()))
                     .build();
         }
 

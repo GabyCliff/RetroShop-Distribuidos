@@ -1,5 +1,4 @@
-import env from "react-dotenv";
-const baseUrl = env.API_URL;
+const baseUrl = 'http://127.0.0.1:5000';
 
 /**
  * Funciones que se encargan de hacer las peticiones HTTP correspondientes segun el metodo recibido
@@ -22,10 +21,10 @@ const fetchWithoutToken = async (endpoint, data, method = 'GET') => {
 			},
 			body: JSON.stringify(data),
 		})
-			.then((response) => response.json()) 
-			.catch((error) => {
-				throw new Error(`Ocurrió un error (${error.message})`);
-			});
+		.then((response) => response.json()) 
+		.catch((error) => {
+			throw new Error(`Ocurrió un error (${error.message})`);
+		});
 	}
 };
 

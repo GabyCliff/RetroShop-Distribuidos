@@ -1,0 +1,276 @@
+syntax = "proto3"; //determino la sintaxis a usar
+
+
+//defino los servicios
+
+////Factura
+service invoiceService{
+  rpc findOneById(IdInvoice) returns (ResponseObjectInvoiceData){}
+  rpc findListByIdBuyer(IdUserBuyer) returns (ResponseObjectInvoiceDataList){}
+  rpc findListByIdSeller(IdUserSeller) returns (ResponseObjectInvoiceDataList){}
+  rpc findListByDatePurchase(DatePurchase) returns (ResponseObjectInvoiceDataList){}
+  rpc createNewInvoice(InvoiceRequest) returns (ResponseObjectInvoiceData){}
+  rpc updateInvoice(DataInvoiceToUpdateRequest) returns (ResponseObjectInvoiceData){}
+}
+
+////Item
+service itemService{
+  rpc findOneById(IdItem) returns (ResponseObjectItemData){}
+  rpc findListByIdInvoice(IdInvoiceInItem) returns (ResponseObjectItemDataList){}
+  rpc createNewItem(ItemRequest) returns (ResponseObjectItemData){}
+  rpc updateItem(DataItemToUpdateRequest) returns (ResponseObjectItemData){}
+}
+
+/////virtual wallet
+service virtualWalletService{
+  rpc findOneById(IdVirtualWallet) returns (ResponseObjectVirtualWalletData){}
+  rpc findByIdUser(IdUserInVW) returns (ResponseObjectVirtualWalletData){}
+  rpc createNewVirtualWallet(VirtualWalletRequest) returns (ResponseObjectVirtualWalletData){}
+  rpc updateVirtualWallet(DataToUpdateRequest) returns (ResponseObjectVirtualWalletData){}
+}
+
+//////USER
+service userService{
+  rpc findCurrentUser(CurrentUser) returns (ResponseObjectUserData){}
+  rpc findUserByUsername(UserToFind) returns (ResponseObjectUserData){}
+  rpc createNewUser(UserRequest) returns (ResponseObjectUserData){}
+  rpc getList(Empty) returns (ResponseUserList){}
+}
+
+//PRODUCTS
+service productService{
+  rpc saveProduct(ProductSaveRequest) returns (Response){}
+  rpc updateProduct(ProductUpdateRequest) returns (Response){}
+  rpc getProduct(IdProduct) returns (ProductResponse){}
+  rpc findByIdUser(IdUserInProduct) returns (ProductResponseList){}
+  rpc getAll(EmptyProduct) returns (ProductResponseList){}
+}
+
+////Para factura
+message IdInvoice{
+  int64 idInvoice = 1;
+}
+
+message IdUserBuyer{
+  int64 idUserBuyer = 1;
+}
+
+message IdUserSeller{
+  int64 idUserSeller = 1;
+}
+
+message DatePurchase{
+  string datePurchase = 1;
+}
+
+message InvoiceRequest{
+  int64 idUserBuyer = 1;
+  int64 idUserSeller = 2;
+  float total = 3;
+  string datePurchase = 5;
+}
+
+message InvoiceResponse{
+  int64 id = 1;
+  float total = 2;
+  string datePurchase = 3;
+  UserResponse userBuyer = 4;
+  UserResponse userSeller = 5;
+}
+
+message DataInvoiceToUpdateRequest{
+  int64 id = 1;
+  float total = 2;
+}
+
+message ResponseObjectInvoiceDataList{
+  repeated InvoiceResponse invoiceResponses = 1;
+}
+
+message ResponseObjectInvoiceData{
+  InvoiceResponse invoiceResponse = 1;
+  TransactionMessageInvoice description = 2;
+}
+
+message TransactionMessageInvoice{
+  string message = 1;
+}
+
+
+/////Para ítem
+message IdItem{
+  int64 idItem = 1;
+}
+
+message IdInvoiceInItem{
+    int64 idInvoice = 1;
+}
+
+message ItemRequest{
+  int64 idProduct = 1;
+  int64 quantity = 2;
+  float subTotal = 3;
+  int64 idInvoice = 5;
+}
+
+message ItemResponse{
+  int64 id = 1;
+  int64 quantity = 2;
+  float subTotal = 3;
+  ProductResponse productResponse = 4;
+  InvoiceResponse invoiceResponse = 5;
+}
+
+message DataItemToUpdateRequest{
+  int64 id = 1;
+  int64 quantity = 2;
+  float subTotal = 3;
+}
+
+message ResponseObjectItemDataList{
+  repeated InvoiceResponse itemResponses = 1;
+}
+
+message ResponseObjectItemData{
+  ItemResponse itemResponse = 1;
+  TransactionMessageItem description = 2;
+}
+
+message TransactionMessageItem{
+  string message = 1;
+}
+
+////Para virtual wallet
+message IdVirtualWallet{
+  int64 idVirWall = 1;
+}
+message IdUserInVW{
+  int64 idUser = 1;
+}
+message VirtualWalletRequest{
+  int64 balance = 1;
+  int64 idUser = 2;
+}
+
+message VirtualWalletResponse{
+  int64  id = 1;
+  int64 balance = 2;
+  UserResponse userResponse = 3;
+}
+
+message DataToUpdateRequest{
+  int64 idUser = 1;
+  bool is_money_income= 2;
+  int64 value = 3;
+}
+
+message ResponseObjectVirtualWalletData{
+  VirtualWalletResponse virtualWalletResponse = 1;
+  TransactionMessage description = 2;
+}
+
+message TransactionMessage{
+  string message = 1;
+}
+
+////Para user
+message Empty {}
+
+message CurrentUser{
+  string username = 1;
+  string password = 2;
+}
+
+message UserToFind{
+  string username = 1;
+  string password = 2;
+  string usernameToFind = 3;
+}
+
+message UserRequest{
+  string usernameAdmin = 1;
+  string username = 2;
+  string password = 3;
+  string name = 4;
+  string surname = 5;
+  string email = 6;
+  int32 dni = 7;
+}
+
+message UserResponse{
+  int64 id = 1;
+  string name = 2;
+  string surname = 3;
+  int32 dni = 4;
+  string email = 5;
+  string username = 6;
+  string password = 7;
+  string role = 8;
+}
+
+message ResponseUserList {
+  repeated UserResponse users = 1;
+}
+
+message ResponseObjectUserData{
+  UserResponse user = 1;
+  TransactionMessageUser description = 2;
+}
+
+message TransactionMessageUser{
+  string message = 1;
+}
+
+// Productos
+message EmptyProduct {}
+
+message IdUserInProduct{
+  int64 idUser = 1;
+}
+
+message IdProduct{
+  int64 idProduct = 1;
+}
+
+message ProductSaveRequest{
+  string name = 1;
+  string description = 2;
+  repeated string listPhoto = 3;
+  float price = 4;
+  int64 quantity = 5;
+  string date = 6;
+  int64 idUser = 7;
+  string category = 8;
+}
+
+message ProductUpdateRequest{
+  int64 id = 1;
+  string name = 2;
+  string description = 3;
+  repeated string listPhoto = 4;
+  float price = 5;
+  int64 quantity = 6;
+  string date = 7;
+  int64 idUser = 8;
+  string category = 9;
+}
+
+message ProductResponse{
+  int64 id = 1;
+  string name = 2;
+  string description = 3;
+  repeated string listPhoto = 4;
+  float price = 5;
+  int64 quantity = 6;
+  string date = 7;
+  string category = 8;
+  UserResponse userResponse = 9;
+}
+
+message ProductResponseList{
+  repeated ProductResponse productResponses = 1;
+}
+
+message Response{
+  string message = 1;
+}

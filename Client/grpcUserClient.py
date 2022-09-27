@@ -1,7 +1,7 @@
 from importlib.abc import Finder
 import grpc
-import proto.user.client_grpc_pb2 as service_pb2
-import proto.user.client_grpc_pb2_grpc as service_grpc
+import proto.retroShop_grpc_pb2 as service_pb2
+import proto.retroShop_grpc_pb2_grpc as service_grpc
 
 class UserClient(object):
    
