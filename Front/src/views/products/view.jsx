@@ -20,16 +20,16 @@ function Products() {
         }
         <div className='productItem'>
               <CardProduct/>
-            </div>
-            <div className='productItem'>
-              <CardProduct/>
-            </div>
-            <div className='productItem'>
-              <CardProduct/>
-            </div>
-            <div className='productItem'>
-              <CardProduct/>
-            </div>
+        </div>
+        <div className='productItem'>
+          <CardProduct/>
+        </div>
+        <div className='productItem'>
+          <CardProduct/>
+        </div>
+        <div className='productItem'>
+          <CardProduct/>
+        </div>
       </div>
     </div>
   )

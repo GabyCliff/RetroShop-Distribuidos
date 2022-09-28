@@ -1,8 +1,6 @@
-import * as React from 'react';
-import Avatar from '@mui/material/Avatar';
+import { useEffect, useState } from 'react';
 import Alert from '@mui/material/Alert';
 import Button from '@mui/material/Button';
-import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Grid';
 import Stack from '@mui/material/Stack';
@@ -11,48 +9,49 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import Snackbar from '@mui/material/Snackbar';
 import CircularProgress from "@mui/material/CircularProgress";
-import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 
-import {registerAPI, getAPI} from "./api";
-import { useNavigate } from 'react-router-dom';
+import { fetchWithoutToken } from '../../../helpers/fetch';
+import { useSession } from '../../../hooks/sessionContext/useSession';
 
 export default function AddWalletCredit() {
 
-  let [loading, setLoading] = React.useState(false);
-  let [response, setResponse] = React.useState(null);
-  let [saldo, setSaldo] = React.useState(0);
-  const navigate = useNavigate();
+  let [loading, setLoading] = useState(false);
+  let [response, setResponse] = useState(null);
+  let [saldo, setSaldo] = useState(0);
+  const { getWalletValues , getUserId} = useSession();
 
-  React.useEffect(() => {
-    /* const promise = getAPI((JSON.parse(getSession().data).dni).toString())
-      promise.then((msg) => {
-        console.log('msg',msg)
-        const saldo = msg ? msg.balance : 0;
-        !msg && navigate('/addWallet')
-        setSaldo(saldo);
-        setResponse(msg);
-      })
-      .catch((error) => {
-        setResponse(error);
-      })
-      .finally(() => setLoading(false));
-       */
+  useEffect(() => {
+    const {wallet , walletId } = getWalletValues();
+      wallet &&
+        fetchWithoutToken('vw/findOneById',{idVW : parseInt(walletId)},'POST')
+          .then(({virtualWalletResponse}) => {
+            virtualWalletResponse.balance && setSaldo(virtualWalletResponse.balance)
+          })
+          .catch((error) => {
+            setResponse(error);
+          })
+          .finally(() => setLoading(false));
   }, []);
+  
 
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
+    
     setLoading(true);
-    const promise = registerAPI(data.get("numTarjeta"), data.get("saldoACargar"), true)
-      promise.then((msg) => {
-        setSaldo(msg.balance);
-        setResponse(msg);
-      })
-      .catch((error) => {
-        setResponse(error);
-      })
-      .finally(() => setLoading(false));
-  };
+    fetchWithoutToken('vw/update',{
+      idUser: parseInt(getUserId()),
+      is_money_income: true,
+      value : parseInt(data.get('balance'))
+    },'POST')
+    .then(({virtualWalletResponse}) => {
+      setSaldo(virtualWalletResponse.balance);
+    })
+    .catch((error) => {
+      setResponse(error);
+    })
+    .finally(() => setLoading(false));
+  }; 
 
   return (
     <div>
@@ -67,7 +66,6 @@ export default function AddWalletCredit() {
           <Alert severity={response.status} sx={{ width: '100%' }}> {response.msg} </Alert> 
          </Snackbar> 
         : <></> }
-      <CssBaseline />
       <Box
         sx={{
           marginTop: 8,
@@ -76,14 +74,8 @@ export default function AddWalletCredit() {
           alignItems: 'center',
         }}
       >
-        <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-          <AddCircleOutlineIcon />
-        </Avatar>
         <Typography component="h1" variant="h5">
-          Cargar crédito en la billetera
-        </Typography>
-        <Typography component="h1" variant="h5">
-          Su saldo es: ${saldo}
+          Saldo actual: ${saldo}
         </Typography>
         <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
           <Grid container spacing={2}>
@@ -91,25 +83,15 @@ export default function AddWalletCredit() {
               <TextField
                 required
                 fullWidth
-                id="numTarjeta"
-                label="Número de Tarjeta"
-                name="numTarjeta"
-                autoComplete="numTarjeta"
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                required
-                fullWidth
-                name="saldoACargar"
-                label="Saldo A Cargar"
-                type="saldoACargar"
-                id="saldoACargar"
+                name="balance"
+                label="¿Cuanto desea cargar?"
+                type="balance"
+                id="balance"
               />
             </Grid>
             <Grid item xs={12}>
               <Stack alignItems="center">
-                {loading? <CircularProgress /> :
+                {loading ? <CircularProgress /> :
                 <Button
                   type="submit"
                   fullWidth

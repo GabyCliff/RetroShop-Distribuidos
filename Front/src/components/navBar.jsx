@@ -61,19 +61,19 @@ function Navbar() {
   const [menuSettings, setMenuSettings] = useState(settingsUnlogged);
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
-  const { isLogged, logoutUser} = useSession();
+  const { isLogged, logoutUser, userSession} = useSession();
   const navigate = useNavigate();
 
   React.useEffect(() => {
 	setMenuSettings(isLogged() ? settingsLogged : settingsUnlogged)
-  }, [isLogged])
+  }, [userSession, isLogged])
   
   const handleSettingsMenu = (setting) => {
-	if(setting === 'Logout'){
+	if(setting.path === 'logout'){
 		return logoutUser();
 	}
 	else {
-		return navigate('/'+setting.path.toLowerCase().replace(/\s/g, ''))
+		return navigate('/'+setting.path)
 	}
   }
 
