@@ -1,6 +1,8 @@
 import React from "react";
 //importo las imagenes
 import img from "../img/img01.jpg";
+//importo la data
+import { DataProvider } from "../context/Dataprovider";
 const CardProduct = () => {
     return (
         <>
