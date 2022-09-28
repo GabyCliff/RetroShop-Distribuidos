@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import CardProduct from './cardProduct/view';
 import './styles.css';
 
 function Products() {
@@ -10,13 +11,25 @@ function Products() {
       </div>
       <div className='productListParent'>
         <h2>Products list</h2>
-        {productsData && 
+        {/*productsData && 
           productsData.map( product => 
             <div className='productItem'>
-              <cardProduct product={product}/>
+              <CardProductProduct product={product}/>
             </div>
-          )
+          )*/
         }
+        <div className='productItem'>
+              <CardProduct/>
+            </div>
+            <div className='productItem'>
+              <CardProduct/>
+            </div>
+            <div className='productItem'>
+              <CardProduct/>
+            </div>
+            <div className='productItem'>
+              <CardProduct/>
+            </div>
       </div>
     </div>
   )
