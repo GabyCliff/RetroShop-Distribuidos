@@ -2,7 +2,11 @@ package com.unla.grpc.services.implementations;
 
 import com.unla.grpc.constants.Constants;
 import com.unla.grpc.converters.ItemConverter;
+import com.unla.grpc.converters.ProductConverter;
+import com.unla.grpc.dtos.InvoiceDTO;
+import com.unla.grpc.dtos.ItemBoughtDTO;
 import com.unla.grpc.dtos.ItemDTO;
+import com.unla.grpc.dtos.ProductDTO;
 import com.unla.grpc.dtos.ResponseData;
 import com.unla.grpc.models.Invoice;
 import com.unla.grpc.models.Item;
@@ -10,8 +14,12 @@ import com.unla.grpc.models.Product;
 import com.unla.grpc.repositories.IProductRepository;
 import com.unla.grpc.repositories.InvoiceRepository;
 import com.unla.grpc.repositories.ItemRepository;
+import com.unla.grpc.services.interfaces.IInvoiceService;
 import com.unla.grpc.services.interfaces.IItemService;
 import com.unla.grpc.utils.Functions;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,11 +29,13 @@ import java.util.Optional;
 public class ItemService implements IItemService {
 
     @Autowired
-    ItemRepository itemRepository;
+    private ItemRepository itemRepository;
     @Autowired
-    InvoiceRepository invoiceRepository;
+    private InvoiceRepository invoiceRepository;
     @Autowired
-    IProductRepository productRepository;
+    private IProductRepository productRepository;
+    @Autowired
+    private IInvoiceService invoiceService;
 
     @Override
     public ResponseData<ItemDTO> createItem(ItemDTO itemDTO) {
@@ -69,6 +79,31 @@ public class ItemService implements IItemService {
         }
 
         return new ResponseData<>();
+    }
+
+    @Override
+    public List<ItemDTO> getAllByInvoice(long invoiceId) {
+        return itemRepository.findAllByIdInvoice(invoiceId).stream()
+                .map(ItemConverter::fromItem_to_ItemDTO).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<ItemBoughtDTO> getAllBoughtItems(long userId) {
+        List<ItemBoughtDTO> itemsBought = new ArrayList<>();
+        List<ItemDTO> items = new ArrayList<>();
+        List<InvoiceDTO> invoices = invoiceService.getInvoicesByBuyer(userId);
+        for (InvoiceDTO inv : invoices){
+            items.addAll(getAllByInvoice(inv.getId()));
+        }
+
+        for (ItemDTO itemDTO : items){
+            Product product = productRepository.findById(itemDTO.getIdProduct()).orElse(null);
+            itemsBought.add(new ItemBoughtDTO(itemDTO.getId(),
+                    product == null ? new ProductDTO() : ProductConverter.fromProduct_to_ProductDTO(product),
+                    itemDTO.getQuantity(), itemDTO.getSubtotal(), itemDTO.getIdInvoice()));
+        }
+
+        return itemsBought;
     }
 
 }

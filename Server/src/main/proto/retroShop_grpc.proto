@@ -22,6 +22,7 @@ service itemService{
   rpc findListByIdInvoice(IdInvoiceInItem) returns (ResponseObjectItemDataList){}
   rpc createNewItem(ItemRequest) returns (ResponseObjectItemData){}
   rpc updateItem(DataItemToUpdateRequest) returns (ResponseObjectItemData){}
+  rpc getBoughtItems(IdUserBuyer) returns (ItemsBoughtList){}
 }
 
 /////virtual wallet
@@ -38,6 +39,7 @@ service userService{
   rpc findUserByUsername(UserToFind) returns (ResponseObjectUserData){}
   rpc createNewUser(UserRequest) returns (ResponseObjectUserData){}
   rpc getList(Empty) returns (ResponseUserList){}
+  rpc buyProducts(ProductsToBuy) returns (TransactionMessage){}
 }
 
 //PRODUCTS
@@ -47,6 +49,7 @@ service productService{
   rpc getProduct(IdProduct) returns (ProductResponse){}
   rpc findByIdUser(IdUserInProduct) returns (ProductResponseList){}
   rpc getAll(EmptyProduct) returns (ProductResponseList){}
+  rpc getAllPublishedProductsByUserId(IdUserInProduct) returns (MyProductsResponseList){}
 }
 
 ////Para factura
@@ -143,6 +146,17 @@ message TransactionMessageItem{
   string message = 1;
 }
 
+message ItemBoughtResponse{
+  int64 id = 1;
+  int64 quantity = 2;
+  float subTotal = 3;
+  ProductBasicResponse product = 4;
+}
+
+message ItemsBoughtList{
+  repeated ItemBoughtResponse items = 1;
+}
+
 ////Para virtual wallet
 message IdVirtualWallet{
   int64 idVirWall = 1;
@@ -223,6 +237,16 @@ message TransactionMessageUser{
   string message = 1;
 }
 
+message ProductToBuy{
+  int64 productId = 1;
+  int64 quantity = 2;
+}
+
+message ProductsToBuy{
+  int64 userId = 1;
+  repeated ProductToBuy products = 2;
+}
+
 // Productos
 message EmptyProduct {}
 
@@ -269,10 +293,25 @@ message ProductResponse{
   UserResponse userResponse = 9;
 }
 
+message ProductBasicResponse{
+  int64 id = 1;
+  string name = 2;
+  string description = 3;
+  repeated string listPhoto = 4;
+  float price = 5;
+  int64 quantity = 6;
+  string date = 7;
+  string category = 8;
+}
+
 message ProductResponseList{
   repeated ProductResponse productResponses = 1;
 }
 
 message Response{
   string message = 1;
+}
+
+message MyProductsResponseList{
+  repeated ProductBasicResponse products = 1;
 }

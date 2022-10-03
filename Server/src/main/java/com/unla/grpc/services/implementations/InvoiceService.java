@@ -3,6 +3,7 @@ package com.unla.grpc.services.implementations;
 import com.unla.grpc.constants.Constants;
 import com.unla.grpc.converters.DateConverter;
 import com.unla.grpc.converters.InvoiceConverter;
+import com.unla.grpc.converters.UserConverter;
 import com.unla.grpc.dtos.ResponseData;
 import com.unla.grpc.dtos.InvoiceDTO;
 import com.unla.grpc.models.Invoice;
@@ -10,6 +11,8 @@ import com.unla.grpc.repositories.InvoiceRepository;
 import com.unla.grpc.repositories.UserRepository;
 import com.unla.grpc.services.interfaces.IInvoiceService;
 import com.unla.retroshopservicegrpc.grpc.InvoiceResponse;
+import java.util.List;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,11 +22,9 @@ import java.util.Optional;
 public class InvoiceService implements IInvoiceService {
 
     @Autowired
-    InvoiceRepository invoiceRepository;
+    private InvoiceRepository invoiceRepository;
     @Autowired
-    UserRepository userRepository;
-    @Autowired
-    UserService userService;
+    private UserRepository userRepository;
 
     @Override
     public ResponseData<InvoiceDTO> createNewInvoice(InvoiceDTO invoiceDTO) {
@@ -85,13 +86,22 @@ public class InvoiceService implements IInvoiceService {
                 .setId(invoiceDTOResponseData.getData().getId())
                 .setDatePurchase(DateConverter.LocalDate_to_String(invoiceDTOResponseData.getData().getDatePurchase()))
                 .setTotal(invoiceDTOResponseData.getData().getTotal())
-                .setUserBuyer( userService.getUserResponseById(invoiceDTOResponseData.getData().getIdBuyer()) )
-                .setUserSeller( userService.getUserResponseById(invoiceDTOResponseData.getData().getIdSeller()) )
+                .setUserBuyer(UserConverter.fromOptionalUser_to_UserResponse(
+                        userRepository.findById(invoiceDTOResponseData.getData().getIdBuyer())))
+                .setUserSeller(UserConverter.fromOptionalUser_to_UserResponse(
+                        userRepository.findById(invoiceDTOResponseData.getData().getIdSeller())))
                 .build();
     }
 
     @Override
     public void setup(InvoiceDTO invoiceDTO){
 
+    }
+
+    @Override
+    public List<InvoiceDTO> getInvoicesByBuyer(long userId) {
+        return invoiceRepository.findAllByIdBuyer(userId).stream().map(
+                InvoiceConverter::fromInvoice_to_InvoiceDTO).collect(
+                Collectors.toList());
     }
 }

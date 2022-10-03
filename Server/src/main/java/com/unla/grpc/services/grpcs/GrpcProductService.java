@@ -5,6 +5,8 @@ import com.unla.grpc.dtos.ProductDTO;
 import com.unla.grpc.services.implementations.ProductService;
 import com.unla.retroshopservicegrpc.grpc.*;
 import io.grpc.stub.StreamObserver;
+import java.util.ArrayList;
+import java.util.List;
 import net.devh.boot.grpc.server.service.GrpcService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -87,4 +89,33 @@ public class GrpcProductService extends productServiceGrpc.productServiceImplBas
         responseObserver.onCompleted();
     }
 
+    @Override
+    public void getAllPublishedProductsByUserId(IdUserInProduct request,
+            StreamObserver<MyProductsResponseList> responseObserver) {
+
+        List<ProductDTO> myProducts = productService.getByIdUser(request.getIdUser());
+
+        List<ProductBasicResponse> responses = new ArrayList<>();
+
+        for (ProductDTO prod : myProducts){
+            ProductBasicResponse basic = ProductBasicResponse.newBuilder()
+                    .setId(prod.getId())
+                    .setName(prod.getName())
+                    .setDescription(prod.getDescription())
+                    .addAllListPhoto(prod.getPhotos())
+                    .setPrice(prod.getPrice())
+                    .setQuantity(prod.getQuantity())
+                    .setDate(prod.getDate().toString())
+                    .setCategory(prod.getCategory())
+                    .build();
+
+            responses.add(basic);
+        }
+
+        MyProductsResponseList responseList = MyProductsResponseList.newBuilder()
+                .addAllProducts(responses).build();
+
+        responseObserver.onNext(responseList);
+        responseObserver.onCompleted();
+    }
 }
