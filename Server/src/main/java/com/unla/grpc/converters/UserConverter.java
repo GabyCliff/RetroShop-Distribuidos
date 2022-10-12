@@ -20,7 +20,7 @@ public class UserConverter {
         user.setName(dto.getName());
         user.setSurname(dto.getSurname());
         user.setEmail(dto.getEmail());
-        user.setRole("STANDARD");
+        user.setRole( (dto.getRole() != null) ? dto.getRole() : "STANDARD" );
         user.setDni(dto.getDni());
         return user;
     }

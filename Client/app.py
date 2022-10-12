@@ -158,7 +158,8 @@ def getItemByIdInvoice():
 @cross_origin()
 def newInvoice():
     invoice = InvoiceClient()
-    result = invoice.create(request.json)
+    print(request.json)
+    result = invoice.create(request.json)    
     return MessageToJson(result)
 
 @app.route(base_url_invoice+'/findById', methods=['POST'])
@@ -202,4 +203,4 @@ def findLisByDatePurchaseOfInvoice():
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True, port=5001)

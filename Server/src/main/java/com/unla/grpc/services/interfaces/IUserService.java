@@ -14,6 +14,8 @@ public interface IUserService {
 
     UserDTO getUserById(long id);
 
+    UserDTO getUserByIdREST(long id);
+
     UserResponse getUserResponseById(long idUser);
 
     ResponseData<UserDTO> getCurrentUser(String username, String password);

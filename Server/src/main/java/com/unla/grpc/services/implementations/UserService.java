@@ -99,6 +99,15 @@ public class UserService implements IUserService {
     }
 
     @Override
+    public UserDTO getUserByIdREST(long id) {
+        Optional<User> userResult = userRepository.findById(id);
+        return userResult.map(
+                        user -> (UserConverter.fromUserToUserDTO(user)))
+                .orElseGet(
+                        () -> new UserDTO());
+    }
+
+    @Override
     public ResponseData<UserDTO> getCurrentUser(String username, String password) {
         String passEncoded = encryptPass(password);
         Optional<User> userResult = userRepository.findByUsernameAndPassword(username, passEncoded);
@@ -158,6 +167,7 @@ public class UserService implements IUserService {
 
     @Override
     public void setup(UserDTO userDTO) {
+        System.out.println(userDTO);
         String passEncoded = encryptPass(userDTO.getPassword());
         userDTO.setPassword(passEncoded);
         userRepository.save(UserConverter.fromUserDTOtoUser(userDTO));

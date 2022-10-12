@@ -15,14 +15,15 @@ class InvoiceClient(object):
       self.channel = grpc.insecure_channel('{}:{}'.format(self.host,self.server_port))
       self.stub = service_grpc.invoiceServiceStub(self.channel)
 
-  def create(self, virtualWallet):
-      invoiceRequest = service_pb2.InvoiceRequest(
-            idUserBuyer = virtualWallet['idUserBuyer'],
-            idUserSeller = virtualWallet['idUserSeller'],
-            total = virtualWallet['total'],
-            datePurchase = virtualWallet['datePurchase'],
-      )
-      return self.stub.createNewInvoice(invoiceRequest)
+  def create(self, invoice):
+        print(invoice)
+        invoiceRequest = service_pb2.InvoiceRequest(
+            idUserBuyer = invoice['idUserBuyer'],
+            idUserSeller = invoice['idUserSeller'],
+            total = invoice['total'],
+            datePurchase = invoice['datePurchase'],
+        )
+        return self.stub.createNewInvoice(invoiceRequest)
   
   def getOneById(self, inputId):
       idRequest = service_pb2.IdInvoice(
