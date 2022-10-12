@@ -31,10 +31,10 @@ public class GrpcProductService extends productServiceGrpc.productServiceImplBas
         productAux.setIdUser(request.getIdUser());
         productAux.setCategory(request.getCategory());
 
-        HttpStatus state = productService.saveProduct(productAux).getStatusCode();
+        String state = productService.saveProduct(productAux);
 
         Response responseUser = Response.newBuilder()
-                .setMessage(String.valueOf(state))
+                .setMessage(state)
                 .build();
 
         responseObserver.onNext(responseUser);
@@ -56,10 +56,10 @@ public class GrpcProductService extends productServiceGrpc.productServiceImplBas
         productAux.setIdUser(request.getIdUser());
         productAux.setCategory(request.getCategory());
 
-        HttpStatus state = productService.saveProduct(productAux).getStatusCode();
+        String state = productService.saveProduct(productAux);
 
         Response responseUser = Response.newBuilder()
-                .setMessage(String.valueOf(state))
+                .setMessage(state)
                 .build();
 
         responseObserver.onNext(responseUser);

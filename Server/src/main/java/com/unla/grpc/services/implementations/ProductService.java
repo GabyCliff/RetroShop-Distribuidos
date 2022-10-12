@@ -62,18 +62,17 @@ public class ProductService implements IProductService {
                 .build();
     }
     @Override
-    public ResponseEntity<String> saveProduct(ProductDTO product) {
+    public String saveProduct(ProductDTO product) {
      /*   Optional<User> user = userRepository.findById(product.getIdUser());
         if (user.isPresent()) {*/
             Product aux = modelMapper.map(product, Product.class);
-            System.out.println(product.getPhotos());
             if (product.getPhotos().size() > 5) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El producto no fue agregado porque tiene mas de 5 fotos");
+                return "El producto no fue agregado porque tiene mas de 5 fotos";
             } else if (product.getPhotos().size() < 1) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El producto no fue agregado porque tiene menos de 1 foto");
+                return "El producto no fue agregado porque tiene menos de 1 foto";
             }
-            productRepository.save(aux);
-            return ResponseEntity.status(HttpStatus.CREATED).body("El producto fue agregado correcatamente");
+            Product prod = productRepository.save(aux);
+            return prod.getId().toString();
         /*}else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El producto no fue agregado porque el usuario no está registrado");
         }*/

@@ -27,7 +27,7 @@ export default function NewProduct({openModal, switchModal}) {
   const [fabricationDate, setFabricationDate] = useState(null);
   const [listUrlImages, setListUrlImages] = useState([]);
   const [objectData, setObjectData] = useState({})
-  const { getUserId } = useSession();
+  const { getUserId, getUserName } = useSession();
 
   const saveImages = e => {
     let imagesFiles = Object.entries(e.target.files);
@@ -67,8 +67,8 @@ export default function NewProduct({openModal, switchModal}) {
   }
 
   const parseToDate = (date) => {
-    let day = date.date() > 10 ? date.date() : '0'+date.date();
-    let month = parseInt(date.month())+1 > 10 ? parseInt(date.month())+1 : '0'+(parseInt(date.month())+1);
+    let day = date.date() > 9 ? date.date() : '0'+date.date();
+    let month = parseInt(date.month())+1 > 9 ? parseInt(date.month())+1 : '0'+(parseInt(date.month())+1);
     let year = date.year();
     return year+'-'+month+'-'+day;
   }
@@ -93,16 +93,30 @@ export default function NewProduct({openModal, switchModal}) {
     if(images.length > 0 && listUrlImages.length === images.length){
       const data = { ...objectData, listPhoto : listUrlImages}
       
-      axios.post('http://127.0.0.1:5000/saveProduct', data)
-      .then( res => {
+      axios.post('http://127.0.0.1:5001/saveProduct', data)
+      .then(async res =>  {
         setResponse({ status : 'success', msg : 'Producto cargado correctamente'})
         setImages([]);
-        setListUrlImages([]);
-        setTimeout(() => {
-          setLoading(false);
-          switchModal();
-          setResponse(null);
-        }, 2000);
+        setListUrlImages([]);        
+        const idProduct = parseInt(res.data.message);
+        await axios.post('http://127.0.0.1:5001/getProduct', { idProduct })
+        .then( res => {
+            axios.post('http://127.0.0.1:5000/new_topic_to_product_new', {
+              username : getUserName(),
+              id_product : idProduct,
+              old_name : res.data.name,
+              old_price: res.data.price
+          }).then( res => {
+            setTimeout(() => {
+              setLoading(false);
+              switchModal();
+              setResponse(null);
+            }, 2000);
+          }) 
+        })
+        console.log(response)
+
+        
       })
       .catch(error => {
         setLoading(false);

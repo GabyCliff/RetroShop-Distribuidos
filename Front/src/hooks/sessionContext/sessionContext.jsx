@@ -15,6 +15,7 @@ const SessionProvider = ({children}) => {
     const isLogged = () => getSession().data !== null ? true : false; 
     const getRole = (role) => role && userSession?.rol === role;
     const getUserId = () => getSession().data.id;
+    const getUserName = () => getSession().data.username;
     const getWalletValues = () => { 
         const { data } = getSession();
         return { wallet : data.wallet, walletId : data.walletId}
@@ -80,7 +81,8 @@ const SessionProvider = ({children}) => {
         isLogged,
         getRole,
         getUserId,
-        getWalletValues
+        getWalletValues,
+        getUserName
 	};
 
     return (

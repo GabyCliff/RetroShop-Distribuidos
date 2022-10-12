@@ -12,7 +12,7 @@ public interface IProductService {
 
     ProductDTO getProduct(Long id);
 
-    ResponseEntity<String> saveProduct(ProductDTO product);
+    String saveProduct(ProductDTO product);
 
     ResponseEntity<String> updateProduct(ProductDTO product, long id);
 

@@ -20,7 +20,7 @@ public class ProductController {
     }
 
     @PostMapping("/save")
-    public ResponseEntity<String> saveProduct(@RequestBody ProductDTO product) {
+    public String saveProduct(@RequestBody ProductDTO product) {
         return this.productService.saveProduct(product);
     }
 

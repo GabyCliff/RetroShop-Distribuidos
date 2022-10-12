@@ -8,8 +8,8 @@ import './styles.css';
 
 
 const rows = [
-  { name: 'Kageyama de Bokita', description: 'Jugador de Voley, colocador', price: 999999.9, quantity : 1, listPhotos : ['https://res.cloudinary.com/sebaacr/image/upload/v1663537574/retroShop/kageyamaBokita_gjhssv.jpg']},
-  { name: 'Nishinoya de Bokita', description: 'Jugador de Voley, libero', price: 99999.9, quantity : 1, listPhotos : ['https://res.cloudinary.com/sebaacr/image/upload/v1663537574/retroShop/liberoBokita_v4idzs.jpg']}
+  { id: 28, name: 'Kageyama de Bokita', description: 'Jugador de Voley, colocador', price: 999999.9, quantity : 1, listPhotos : ['https://res.cloudinary.com/sebaacr/image/upload/v1663537574/retroShop/kageyamaBokita_gjhssv.jpg']},
+  { id: 27, name: 'Nishinoya de Bokita', description: 'Jugador de Voley, libero', price: 99999.9, quantity : 1, listPhotos : ['https://res.cloudinary.com/sebaacr/image/upload/v1663537574/retroShop/liberoBokita_v4idzs.jpg']}
 ];
 const MyProducts = () => {
   const [products, setProducts] = useState(rows);
